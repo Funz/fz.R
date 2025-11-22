@@ -46,6 +46,21 @@ if (fz_available()) {
 }
 ```
 
+### Core Functions
+
+The package provides R wrappers for the main fz Python functions:
+
+```r
+# Use the core fz functions
+result1 <- fz(...)    # Main fz function
+result2 <- fzi(...)   # fzi function
+result3 <- fzc(...)   # fzc function
+result4 <- fzo(...)   # fzo function
+result5 <- fzd(...)   # fzd function
+```
+
+All functions pass arguments directly to their Python counterparts, maintaining the same API and behavior as the original fz Python package.
+
 ## System Requirements
 
 - R (>= 3.6.0)
