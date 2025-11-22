@@ -1,0 +1,331 @@
+---
+title: "Using fz with Modelica Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using fz with Modelica Models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE  # Set to TRUE when fz Python package is properly configured
+)
+```
+
+```{r setup}
+library(fz)
+```
+
+## Introduction
+
+This vignette demonstrates how to use the `fz` R package to run design of
+experiments, optimization, and uncertainty quantification with Modelica models.
+
+## Installation
+
+First, ensure you have the fz Python package installed:
+
+```{r install}
+# Install fz Python package
+fz_install()
+
+# Verify installation
+fz_available()
+```
+
+## Basic Workflow
+
+The typical workflow with fz involves:
+
+1. **Initialize** a project with a Modelica model (`fzi`)
+2. **Configure** input variables and outputs (`fzc`)
+3. **Execute** design of experiments or optimization (`fzd`, `fzo`, or `fz`)
+4. **Analyze** results
+
+## Example 1: Bouncing Ball Simulation
+
+This example demonstrates a simple design of experiments with a bouncing ball
+Modelica model.
+
+### Model Description
+
+The bouncing ball model simulates a ball dropping from an initial height with
+gravity and bouncing with a coefficient of restitution.
+
+**Input variables:**
+- `h0`: Initial height (m)
+- `v0`: Initial velocity (m/s)
+- `e`: Coefficient of restitution (0-1)
+
+**Output variables:**
+- `h_max`: Maximum bounce height (m)
+- `t_ground`: Time to first ground contact (s)
+
+### Running the Design of Experiments
+
+```{r bouncing_ball}
+# Initialize project with Modelica model
+fzi(
+  model = "modelica",
+  model_path = "path/to/BouncingBall.mo"
+)
+
+# Configure input variables with ranges
+fzc(
+  input = list(
+    h0 = c(1.0, 10.0),    # height from 1m to 10m
+    v0 = c(-2.0, 2.0),    # velocity from -2 to 2 m/s
+    e = c(0.5, 0.9)       # restitution from 0.5 to 0.9
+  ),
+  output = c("h_max", "t_ground")
+)
+
+# Run Latin Hypercube sampling with 50 samples
+results <- fzd(
+  design = "LatinHypercube",
+  n = 50
+)
+
+# Analyze results
+summary(results)
+plot(results$h0, results$h_max,
+     xlab = "Initial Height (m)",
+     ylab = "Maximum Bounce Height (m)")
+```
+
+## Example 2: Spring-Mass-Damper Optimization
+
+This example shows how to optimize parameters of a spring-mass-damper system.
+
+### Model Description
+
+A spring-mass-damper system responding to an initial force.
+
+**Input variables:**
+- `m`: Mass (kg)
+- `k`: Spring stiffness (N/m)
+- `c`: Damping coefficient (N·s/m)
+
+**Output variables:**
+- `settling_time`: Time to settle (s)
+- `overshoot`: Maximum overshoot (%)
+
+### Running the Optimization
+
+```{r spring_mass}
+# Initialize
+fzi(
+  model = "modelica",
+  model_path = "path/to/SpringMassDamper.mo"
+)
+
+# Configure with fixed force
+fzc(
+  input = list(
+    m = c(0.5, 5.0),
+    k = c(100, 10000),
+    c = c(1, 100)
+  ),
+  fixed = list(F0 = 100),  # Fixed initial force
+  output = c("settling_time", "overshoot")
+)
+
+# Optimize to minimize settling time while constraining overshoot
+results <- fzo(
+  objective = "minimize",
+  objective_var = "settling_time",
+  constraints = list(overshoot = c(-Inf, 10)),  # Max 10% overshoot
+  algorithm = "GradientDescent"
+)
+
+# View optimal parameters
+print(results$optimal_input)
+print(results$optimal_output)
+```
+
+## Example 3: Heat Exchanger Parameter Study
+
+This example demonstrates a full factorial design for a heat exchanger.
+
+### Model Description
+
+A counter-flow heat exchanger with hot and cold fluid streams.
+
+**Input variables:**
+- `mdot_hot`: Hot fluid flow rate (kg/s)
+- `mdot_cold`: Cold fluid flow rate (kg/s)
+
+**Output variables:**
+- `effectiveness`: Heat exchanger effectiveness (0-1)
+- `Q_total`: Total heat transfer (W)
+
+### Running the Parameter Study
+
+```{r heat_exchanger}
+# Initialize
+fzi(
+  model = "modelica",
+  model_path = "path/to/HeatExchanger.mo"
+)
+
+# Configure variables
+fzc(
+  input = list(
+    mdot_hot = c(0.5, 1.0, 1.5),   # 3 levels
+    mdot_cold = c(0.5, 1.0, 1.5)   # 3 levels
+  ),
+  fixed = list(
+    T_hot_in = 80,
+    T_cold_in = 20
+  ),
+  output = c("effectiveness", "Q_total")
+)
+
+# Full factorial design: 3 x 3 = 9 runs
+results <- fzd(
+  design = "FullFactorial"
+)
+
+# Create response surface
+library(ggplot2)
+ggplot(results, aes(x = mdot_hot, y = mdot_cold, fill = effectiveness)) +
+  geom_tile() +
+  scale_fill_viridis_c() +
+  labs(
+    title = "Heat Exchanger Effectiveness",
+    x = "Hot Flow Rate (kg/s)",
+    y = "Cold Flow Rate (kg/s)"
+  )
+```
+
+## Example 4: Uncertainty Quantification
+
+This example shows how to perform uncertainty quantification with uncertain
+input parameters.
+
+```{r uncertainty}
+# Initialize model
+fzi(
+  model = "modelica",
+  model_path = "path/to/System.mo"
+)
+
+# Configure with probabilistic inputs
+fzc(
+  input_dist = list(
+    friction_coef = list(
+      type = "normal",
+      mean = 0.3,
+      sd = 0.05
+    ),
+    ambient_temp = list(
+      type = "uniform",
+      min = 15,
+      max = 35
+    )
+  ),
+  output = "performance"
+)
+
+# Run Monte Carlo simulation
+results <- fz(
+  n_samples = 1000,
+  method = "MonteCarlo"
+)
+
+# Analyze uncertainty in output
+hist(results$performance,
+     main = "Performance Distribution",
+     xlab = "Performance",
+     breaks = 30)
+
+# Summary statistics
+cat("Mean:", mean(results$performance), "\n")
+cat("Std Dev:", sd(results$performance), "\n")
+cat("95% CI:", quantile(results$performance, c(0.025, 0.975)), "\n")
+```
+
+## Advanced Usage
+
+### Custom Design Algorithms
+
+```{r custom_design}
+# Use different DoE algorithms
+results_lhs <- fzd(design = "LatinHypercube", n = 100)
+results_sobol <- fzd(design = "Sobol", n = 100)
+results_random <- fzd(design = "Random", n = 100)
+```
+
+### Optimization Algorithms
+
+```{r opt_algorithms}
+# Gradient-based optimization
+opt1 <- fzo(algorithm = "GradientDescent")
+
+# Genetic algorithm for non-smooth objectives
+opt2 <- fzo(algorithm = "NSGA2")
+
+# Particle swarm optimization
+opt3 <- fzo(algorithm = "PSO")
+```
+
+### Parallel Execution
+
+```{r parallel}
+# Enable parallel execution for faster computation
+fzc(
+  parallel = TRUE,
+  n_cores = 4
+)
+```
+
+## Best Practices
+
+1. **Start small**: Test with a few samples before running large DoE
+2. **Validate models**: Ensure Modelica models compile and run independently
+3. **Check ranges**: Verify input ranges are physically meaningful
+4. **Monitor convergence**: For optimization, check convergence criteria
+5. **Save results**: Store results for reproducibility
+
+```{r save_results}
+# Save results to file
+saveRDS(results, "fz_results.rds")
+
+# Export to CSV for analysis in other tools
+write.csv(results, "fz_results.csv", row.names = FALSE)
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Python package not found:**
+```{r troubleshoot1}
+# Reinstall fz Python package
+fz_install()
+```
+
+**Modelica compilation errors:**
+- Check that the Modelica model path is correct
+- Ensure the model compiles in your Modelica environment
+- Verify all dependencies are available
+
+**Slow execution:**
+- Reduce number of samples
+- Enable parallel execution
+- Use faster optimization algorithms for initial exploration
+
+## Further Reading
+
+- Funz documentation: [https://funz.github.io](https://funz.github.io)
+- Modelica language: [https://modelica.org](https://modelica.org)
+- Design of Experiments: See references on DoE methods
+
+## Session Info
+
+```{r session_info}
+sessionInfo()
+```

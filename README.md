@@ -61,6 +61,42 @@ result5 <- fzd(...)   # fzd function
 
 All functions pass arguments directly to their Python counterparts, maintaining the same API and behavior as the original fz Python package.
 
+### Practical Examples
+
+The package includes comprehensive examples for working with Modelica models:
+
+```r
+# Example 1: Design of Experiments with Bouncing Ball model
+fzi(model = "modelica", model_path = "BouncingBall.mo")
+fzc(
+  input = list(h0 = c(1, 10), v0 = c(-2, 2)),
+  output = "h_max"
+)
+results <- fzd(design = "LatinHypercube", n = 50)
+
+# Example 2: Optimization of Spring-Mass-Damper system
+fzi(model = "modelica", model_path = "SpringMassDamper.mo")
+fzc(
+  input = list(m = c(0.5, 5), k = c(100, 10000), c = c(1, 100)),
+  output = "settling_time"
+)
+optimal <- fzo(objective = "minimize", objective_var = "settling_time")
+
+# Example 3: Parameter study for Heat Exchanger
+fzi(model = "modelica", model_path = "HeatExchanger.mo")
+fzc(
+  input = list(mdot_hot = c(0.5, 1.5), mdot_cold = c(0.5, 1.5)),
+  output = c("effectiveness", "Q_total")
+)
+results <- fzd(design = "FullFactorial")
+```
+
+For more detailed examples, see the vignette:
+
+```r
+vignette("modelica-examples", package = "fz")
+```
+
 ## System Requirements
 
 - R (>= 3.6.0)
