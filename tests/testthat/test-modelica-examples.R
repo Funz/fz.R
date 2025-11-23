@@ -57,7 +57,7 @@ test_that("BouncingBall DoE example works as expected", {
 # Test 2: Branin Function - Optimization
 # Equivalent to Python fz example:
 # fz.RunOptimization(model='Branin.mo', input={'x1':[-5,10], 'x2':[0,15]},
-#                    output='y', objective='minimize', algorithm='BFGS')
+#                    output='y', objective='minimize')
 
 test_that("Branin optimization example works as expected", {
   skip_if_not(fz_available(), "fz Python package not available")
@@ -86,10 +86,10 @@ test_that("Branin optimization example works as expected", {
       )
 
       # Run optimization
+      # Note: fzo does not take algorithm parameter
       optimal <- fzo(
         objective = "minimize",
-        objective_var = "y",
-        algorithm = "GradientDescent"
+        objective_var = "y"
       )
 
       # Expected result structure:
@@ -175,6 +175,7 @@ test_that("SpringMassDamper multi-objective optimization", {
   expect_no_error({
     tryCatch({
       # Configure multi-objective optimization
+      # Note: fzo does not take algorithm parameter
       results <- fzo(
         model = model_path,
         input = list(
@@ -187,8 +188,7 @@ test_that("SpringMassDamper multi-objective optimization", {
         objectives = list(
           settling_time = "minimize",
           overshoot = "minimize"
-        ),
-        algorithm = "NSGA2"  # Multi-objective genetic algorithm
+        )
       )
 
       # Expected result: Pareto front of solutions

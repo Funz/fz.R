@@ -253,23 +253,18 @@ cat("95% CI:", quantile(results$performance, c(0.025, 0.975)), "\n")
 ### Custom Design Algorithms
 
 ```{r custom_design}
-# Use different DoE algorithms
+# Different DoE algorithms can be used with fzd
+# Latin Hypercube Sampling - good space-filling properties
 results_lhs <- fzd(design = "LatinHypercube", n = 100)
+
+# Sobol sequences - quasi-random low-discrepancy
 results_sobol <- fzd(design = "Sobol", n = 100)
+
+# Random sampling
 results_random <- fzd(design = "Random", n = 100)
-```
 
-### Optimization Algorithms
-
-```{r opt_algorithms}
-# Gradient-based optimization
-opt1 <- fzo(algorithm = "GradientDescent")
-
-# Genetic algorithm for non-smooth objectives
-opt2 <- fzo(algorithm = "NSGA2")
-
-# Particle swarm optimization
-opt3 <- fzo(algorithm = "PSO")
+# Full factorial (uses all combinations)
+results_factorial <- fzd(design = "FullFactorial")
 ```
 
 ### Parallel Execution
