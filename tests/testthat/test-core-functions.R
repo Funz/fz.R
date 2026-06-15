@@ -30,6 +30,7 @@ test_that("core functions fail gracefully when fz not installed", {
 })
 
 test_that("fzl() returns installed models and calculators", {
+  skip_on_cran()
   skip_if_not(fz_available(), "fz Python package not available")
 
   result <- fzl()
@@ -39,6 +40,7 @@ test_that("fzl() returns installed models and calculators", {
 })
 
 test_that("fzi() parses variables from a template file", {
+  skip_on_cran()
   skip_if_not(fz_available(), "fz Python package not available")
 
   tf <- tempfile(fileext = ".txt")
@@ -53,6 +55,7 @@ test_that("fzi() parses variables from a template file", {
 })
 
 test_that("fzc() compiles a template file with given values", {
+  skip_on_cran()
   skip_if_not(fz_available(), "fz Python package not available")
 
   tf <- tempfile(fileext = ".txt")
@@ -63,7 +66,6 @@ test_that("fzc() compiles a template file with given values", {
 
   expect_no_error(fzc(tf, list(P = 2.0, V = 11.2), model, out_dir))
 
-  # fzc writes compiled files into a subdirectory named var1=val1,var2=val2,...
   compiled_dirs <- list.dirs(out_dir, recursive = FALSE)
   expect_true(length(compiled_dirs) >= 1)
 })

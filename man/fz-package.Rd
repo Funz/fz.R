@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Yann Richet \email{yann.richet@asnr.fr}
+\strong{Maintainer}: Yann Richet \email{yann.richet@asnr.fr} (\href{https://orcid.org/0000-0002-5677-8458}{ORCID})
 
 }
 \keyword{internal}
