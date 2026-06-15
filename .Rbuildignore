@@ -9,3 +9,4 @@
 ^\.vscode$
 ^\.claude$
 ^cran-comments\.md$
+^tests/testthat/\.fz$
