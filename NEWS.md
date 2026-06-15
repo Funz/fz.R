@@ -1,24 +1,31 @@
-# fz 0.1.0
+# fz 1.1
 
-## Initial Release
+First release, aligned with funz-fz 1.1 on PyPI.
 
-* Initial release of fz R package
-* Provides R wrapper for fz Python package using reticulate
-* Core wrapper functions: `fzi()`, `fzc()`, `fzo()`, `fzr()`, `fzl()`, `fzd()`
-* Functions for installing and checking fz availability: `fz_install()`, `fz_available()`
-* Comprehensive test suite with testthat including:
-  - Unit tests for all core functions
-  - Practical Modelica integration tests
-  - Test helpers and fixtures for common use cases
-* Practical examples demonstrating:
-  - Design of Experiments (DoE) with Modelica models
-  - Optimization of system parameters
-  - Uncertainty quantification
-  - Parameter studies and sensitivity analysis
-* Vignette with detailed Modelica examples:
-  - Bouncing ball simulation
-  - Spring-mass-damper optimization
-  - Heat exchanger parameter study
-  - Uncertainty quantification workflows
-* CI/CD setup with GitHub Actions for R CMD check and CRAN checks
-* Complete documentation with roxygen2
+## Core functions
+
+* `fzi(input_path, model)` — parse variable names and defaults from a template file
+* `fzc(input_path, input_variables, model, output_dir)` — compile template by substituting variable values
+* `fzo(output_path, model)` — read and parse output files
+* `fzr(input_path, input_variables, model, ...)` — run full parametric study
+* `fzl(models, calculators, check)` — list installed models and calculators
+* `fzd(input_path, input_variables, model, output_expression, algorithm, ...)` — iterative algorithm-driven design of experiments
+
+## Model and algorithm management
+
+* `install_model(source, global)` / `install_algorithm(source, global)` — install from GitHub, URL, or local zip
+* `uninstall_model(model_name, global)` / `uninstall_algorithm(algorithm_name, global)` — remove installed items
+* `list_installed_models(global)` / `list_installed_algorithms(global)` — list what is installed
+* `list_models()` — alias for `list_installed_models()`
+* `install()` / `uninstall()` — generic aliases for model install/uninstall
+
+## Configuration
+
+* `get_interpreter()` / `set_interpreter(interpreter)` — get or set the formula interpreter (`"python"` or `"R"`)
+* `get_log_level()` / `set_log_level(level)` — control logging verbosity
+* `get_config()` / `print_config()` / `reload_config()` — inspect and reload `FZ_*` environment variable settings
+
+## Package helpers
+
+* `fz_install()` — install the `funz-fz` Python package via reticulate
+* `fz_available()` — check whether the Python package is importable
