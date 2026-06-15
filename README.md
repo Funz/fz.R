@@ -5,133 +5,138 @@
 [![test-coverage](https://github.com/Funz/fz.R/workflows/test-coverage/badge.svg)](https://github.com/Funz/fz.R/actions)
 <!-- badges: end -->
 
-R wrapper for fz core functions using reticulate. This package provides R bindings to the fz Python package, allowing R users to access fz functionality directly from R.
+R wrapper for the [funz-fz](https://pypi.org/project/funz-fz/) Python package using reticulate. fz is a parametric scientific computing framework: it wraps simulation codes to run parameter sweeps, design of experiments, and iterative algorithm-driven studies.
 
 ## Installation
-
-You can install the development version of fz from [GitHub](https://github.com/Funz/fz.R) with:
 
 ```r
 # install.packages("devtools")
 devtools::install_github("Funz/fz.R")
 ```
 
-## Python Dependencies
+## Python dependency
 
-This package requires the `fz` Python package. You can install it using:
+This package requires the `funz-fz` Python package. Install it via the helper:
 
 ```r
 library(fz)
 fz_install()
 ```
 
-Or manually with:
+Or manually:
 
 ```r
-reticulate::py_install("fz")
+reticulate::py_install("funz-fz")
 ```
+
+## Core functions
+
+| Function | Purpose |
+|---|---|
+| `fzi(input_path, model)` | Parse variable names and defaults from a template file |
+| `fzc(input_path, input_variables, model)` | Compile template — substitute variable values |
+| `fzr(input_path, input_variables, model, ...)` | Run full parametric study |
+| `fzo(output_path, model)` | Read and parse output files |
+| `fzl(models, calculators, check)` | List installed models and calculators |
+| `fzd(input_path, input_variables, model, output_expression, algorithm, ...)` | Algorithm-driven iterative DoE |
+
+The **model** argument is either a string alias (name of an installed model, e.g. `"PerfectGas"`) or an inline named list describing how variables are marked in the template and how outputs are extracted.
 
 ## Usage
 
-First, check if the fz Python package is available:
+### 1 — List installed models
 
 ```r
 library(fz)
 
-# Check if fz is available
-if (fz_available()) {
-  message("fz is ready to use!")
-} else {
-  message("Please install fz with fz_install()")
-}
+info <- fzl()
+names(info$models)       # e.g. c("PerfectGas")
+names(info$calculators)  # e.g. c("sh://")
 ```
 
-### Core Functions
-
-The package provides R wrappers for the main fz Python functions:
+### 2 — Parse variables from a template
 
 ```r
-# Use the core fz functions
-result1 <- fz(...)    # Main fz function
-result2 <- fzi(...)   # fzi function
-result3 <- fzc(...)   # fzc function
-result4 <- fzo(...)   # fzo function
-result5 <- fzd(...)   # fzd function
+# Template file: input.txt
+# pressure = ${P~1.013}
+# volume   = ${V~22.4}
+
+model <- list(
+  varprefix = "$", delim = "{}", formulaprefix = "@", commentline = "#"
+)
+
+vars <- fzi("input.txt", model)
+# vars$P == 1.013  (default value)
+# vars$V == 22.4
 ```
 
-All functions pass arguments directly to their Python counterparts, maintaining the same API and behavior as the original fz Python package.
-
-### Practical Examples
-
-The package includes comprehensive examples for working with Modelica models:
+### 3 — Run a parametric study
 
 ```r
-# Example 1: Design of Experiments with Bouncing Ball model
-fzi(model = "modelica", model_path = "BouncingBall.mo")
-fzc(
-  input = list(h0 = c(1, 10), v0 = c(-2, 2)),
-  output = "h_max"
-)
-results <- fzd(design = "LatinHypercube", n = 50)
+# fzr compiles the template for every combination, runs the model via the
+# calculator, and collects all outputs into a data frame.
 
-# Example 2: Optimization of Spring-Mass-Damper system
-fzi(model = "modelica", model_path = "SpringMassDamper.mo")
-fzc(
-  input = list(m = c(0.5, 5), k = c(100, 10000), c = c(1, 100)),
-  output = "settling_time"
+model <- list(
+  varprefix = "$", delim = "{}", formulaprefix = "@", commentline = "#",
+  output = list(pressure = "grep 'pressure' output.txt | cut -d= -f2")
 )
-optimal <- fzo(objective = "minimize", objective_var = "settling_time")
 
-# Example 3: Parameter study for Heat Exchanger
-fzi(model = "modelica", model_path = "HeatExchanger.mo")
-fzc(
-  input = list(mdot_hot = c(0.5, 1.5), mdot_cold = c(0.5, 1.5)),
-  output = c("effectiveness", "Q_total")
+results <- fzr(
+  "input.txt",
+  list(P = c(1.0, 2.0, 3.0), V = 22.4),  # 3 cases
+  model,
+  calculators = "sh://bash run.sh"
 )
-results <- fzd(design = "FullFactorial")
+# results is a data frame with columns P, V, pressure
 ```
 
-For more detailed examples, see the vignette:
+### 4 — Algorithm-driven design of experiments
 
 ```r
-vignette("modelica-examples", package = "fz")
+# fzd iteratively queries the model using an algorithm (e.g. Monte Carlo,
+# surrogate-based optimisation). Input ranges use "[min;max]" strings.
+
+result <- fzd(
+  "input.txt",
+  list(P = "[1;5]", V = "[10;30]"),
+  model,
+  output_expression = "pressure",
+  algorithm        = "algorithms/montecarlo_uniform.py",
+  algorithm_options = "batch_sample_size=10;max_iterations=5"
+)
 ```
 
-## System Requirements
+### 5 — Step-by-step workflow
 
-- R (>= 3.6.0)
-- Python (>= 3.7)
+```r
+# Step 1: inspect which variables the template exposes
+vars <- fzi("input.txt", model)
+
+# Step 2: compile for specific values (no execution)
+fzc("input.txt", list(P = 2.0, V = 11.2), model, output_dir = "compiled")
+
+# Step 3: read output files after running the simulator externally
+values <- fzo("compiled/P=2,V=11.2", model)
+```
+
+## System requirements
+
+- R >= 3.6.0
+- Python >= 3.8
 - reticulate package
 
 ## Development
 
-This package uses:
-
-- **reticulate** for Python integration
-- **testthat** for unit testing
-- **GitHub Actions** for continuous integration and CRAN checks
-- **roxygen2** for documentation
-
-### Running Tests
-
 ```r
-devtools::test()
-```
-
-### Running R CMD check
-
-```r
-devtools::check()
+devtools::test()   # run tests
+devtools::check()  # R CMD check
 ```
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome. Please open a Pull Request or file an issue at
+<https://github.com/Funz/fz.R/issues>.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Issues
-
-Please report issues at https://github.com/Funz/fz.R/issues
+MIT — see [LICENSE](LICENSE).

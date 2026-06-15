@@ -10,7 +10,7 @@ Description: Provides R bindings to fz core functions using reticulate.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 Imports:
     reticulate (>= 1.28)
 Suggests:
@@ -20,7 +20,7 @@ Suggests:
 Config/reticulate:
     list(
         packages = list(
-            list(package = "fz")
+            list(package = "funz-fz")
         )
     )
 VignetteBuilder: knitr

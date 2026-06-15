@@ -1,8 +1,8 @@
 ---
-title: "Using fz with Modelica Models"
+title: "Using fz for parametric studies"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using fz with Modelica Models}
+  %\VignetteIndexEntry{Using fz for parametric studies}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE  # Set to TRUE when fz Python package is properly configured
+  eval = FALSE  # requires funz-fz Python package and a configured calculator
 )
 ```
 
@@ -21,305 +21,218 @@ library(fz)
 
 ## Introduction
 
-This vignette demonstrates how to use the `fz` R package to run design of
-experiments, optimization, and uncertainty quantification with Modelica models.
+The `fz` package provides R bindings to the
+[funz-fz](https://pypi.org/project/funz-fz/) Python package. It lets you:
+
+- run **parameter sweeps** over any simulation code,
+- drive **design of experiments** with adaptive algorithms,
+- read and collect **output files** into data frames.
+
+fz works with any simulation code that reads text input files and writes text
+output files. You describe the model in a small dict (or install it as a named
+alias with `fz install`).
 
 ## Installation
 
-First, ensure you have the fz Python package installed:
-
 ```{r install}
-# Install fz Python package
+# Install the funz-fz Python package into the active reticulate environment
 fz_install()
 
-# Verify installation
+# Verify
 fz_available()
 ```
 
-## Basic Workflow
+## Concepts
 
-The typical workflow with fz involves:
+### Template files
 
-1. **Initialize** a project with a Modelica model (`fzi`)
-2. **Configure** input variables and outputs (`fzc`)
-3. **Execute** design of experiments or optimization (`fzd`, `fzo`, or `fz`)
-4. **Analyze** results
+A **template** is an ordinary input file for your simulator with variable
+placeholders, e.g.:
 
-## Example 1: Bouncing Ball Simulation
-
-This example demonstrates a simple design of experiments with a bouncing ball
-Modelica model.
-
-### Model Description
-
-The bouncing ball model simulates a ball dropping from an initial height with
-gravity and bouncing with a coefficient of restitution.
-
-**Input variables:**
-- `h0`: Initial height (m)
-- `v0`: Initial velocity (m/s)
-- `e`: Coefficient of restitution (0-1)
-
-**Output variables:**
-- `h_max`: Maximum bounce height (m)
-- `t_ground`: Time to first ground contact (s)
-
-### Running the Design of Experiments
-
-```{r bouncing_ball}
-# Initialize project with Modelica model
-fzi(
-  model = "modelica",
-  model_path = "path/to/BouncingBall.mo"
-)
-
-# Configure input variables with ranges
-fzc(
-  input = list(
-    h0 = c(1.0, 10.0),    # height from 1m to 10m
-    v0 = c(-2.0, 2.0),    # velocity from -2 to 2 m/s
-    e = c(0.5, 0.9)       # restitution from 0.5 to 0.9
-  ),
-  output = c("h_max", "t_ground")
-)
-
-# Run Latin Hypercube sampling with 50 samples
-results <- fzd(
-  design = "LatinHypercube",
-  n = 50
-)
-
-# Analyze results
-summary(results)
-plot(results$h0, results$h_max,
-     xlab = "Initial Height (m)",
-     ylab = "Maximum Bounce Height (m)")
+```
+# Perfect Gas parameters
+pressure = ${P~1.013}    # variable P, default 1.013
+volume   = ${V~22.4}     # variable V, default 22.4
+moles    = ${n~1.0}
 ```
 
-## Example 2: Spring-Mass-Damper Optimization
+The placeholder syntax (`$`, `{}`) is defined by the **model** dict.
 
-This example shows how to optimize parameters of a spring-mass-damper system.
+### Model dict
 
-### Model Description
+The model dict tells fz how to:
 
-A spring-mass-damper system responding to an initial force.
+1. find variable placeholders (`varprefix`, `delim`),
+2. extract output values from the result files (`output`).
 
-**Input variables:**
-- `m`: Mass (kg)
-- `k`: Spring stiffness (N/m)
-- `c`: Damping coefficient (N·s/m)
-
-**Output variables:**
-- `settling_time`: Time to settle (s)
-- `overshoot`: Maximum overshoot (%)
-
-### Running the Optimization
-
-```{r spring_mass}
-# Initialize
-fzi(
-  model = "modelica",
-  model_path = "path/to/SpringMassDamper.mo"
-)
-
-# Configure with fixed force
-fzc(
-  input = list(
-    m = c(0.5, 5.0),
-    k = c(100, 10000),
-    c = c(1, 100)
-  ),
-  fixed = list(F0 = 100),  # Fixed initial force
-  output = c("settling_time", "overshoot")
-)
-
-# Optimize to minimize settling time while constraining overshoot
-results <- fzo(
-  objective = "minimize",
-  objective_var = "settling_time",
-  constraints = list(overshoot = c(-Inf, 10)),  # Max 10% overshoot
-  algorithm = "GradientDescent"
-)
-
-# View optimal parameters
-print(results$optimal_input)
-print(results$optimal_output)
-```
-
-## Example 3: Heat Exchanger Parameter Study
-
-This example demonstrates a full factorial design for a heat exchanger.
-
-### Model Description
-
-A counter-flow heat exchanger with hot and cold fluid streams.
-
-**Input variables:**
-- `mdot_hot`: Hot fluid flow rate (kg/s)
-- `mdot_cold`: Cold fluid flow rate (kg/s)
-
-**Output variables:**
-- `effectiveness`: Heat exchanger effectiveness (0-1)
-- `Q_total`: Total heat transfer (W)
-
-### Running the Parameter Study
-
-```{r heat_exchanger}
-# Initialize
-fzi(
-  model = "modelica",
-  model_path = "path/to/HeatExchanger.mo"
-)
-
-# Configure variables
-fzc(
-  input = list(
-    mdot_hot = c(0.5, 1.0, 1.5),   # 3 levels
-    mdot_cold = c(0.5, 1.0, 1.5)   # 3 levels
-  ),
-  fixed = list(
-    T_hot_in = 80,
-    T_cold_in = 20
-  ),
-  output = c("effectiveness", "Q_total")
-)
-
-# Full factorial design: 3 x 3 = 9 runs
-results <- fzd(
-  design = "FullFactorial"
-)
-
-# Create response surface
-library(ggplot2)
-ggplot(results, aes(x = mdot_hot, y = mdot_cold, fill = effectiveness)) +
-  geom_tile() +
-  scale_fill_viridis_c() +
-  labs(
-    title = "Heat Exchanger Effectiveness",
-    x = "Hot Flow Rate (kg/s)",
-    y = "Cold Flow Rate (kg/s)"
+```{r model_dict}
+model <- list(
+  varprefix    = "$",
+  delim        = "{}",
+  formulaprefix = "@",
+  commentline  = "#",
+  output = list(
+    pressure = "grep 'pressure =' output.txt | cut -d= -f2"
   )
-```
-
-## Example 4: Uncertainty Quantification
-
-This example shows how to perform uncertainty quantification with uncertain
-input parameters.
-
-```{r uncertainty}
-# Initialize model
-fzi(
-  model = "modelica",
-  model_path = "path/to/System.mo"
-)
-
-# Configure with probabilistic inputs
-fzc(
-  input_dist = list(
-    friction_coef = list(
-      type = "normal",
-      mean = 0.3,
-      sd = 0.05
-    ),
-    ambient_temp = list(
-      type = "uniform",
-      min = 15,
-      max = 35
-    )
-  ),
-  output = "performance"
-)
-
-# Run Monte Carlo simulation
-results <- fz(
-  n_samples = 1000,
-  method = "MonteCarlo"
-)
-
-# Analyze uncertainty in output
-hist(results$performance,
-     main = "Performance Distribution",
-     xlab = "Performance",
-     breaks = 30)
-
-# Summary statistics
-cat("Mean:", mean(results$performance), "\n")
-cat("Std Dev:", sd(results$performance), "\n")
-cat("95% CI:", quantile(results$performance, c(0.025, 0.975)), "\n")
-```
-
-## Advanced Usage
-
-### Custom Design Algorithms
-
-```{r custom_design}
-# Different DoE algorithms can be used with fzd
-# Latin Hypercube Sampling - good space-filling properties
-results_lhs <- fzd(design = "LatinHypercube", n = 100)
-
-# Sobol sequences - quasi-random low-discrepancy
-results_sobol <- fzd(design = "Sobol", n = 100)
-
-# Random sampling
-results_random <- fzd(design = "Random", n = 100)
-
-# Full factorial (uses all combinations)
-results_factorial <- fzd(design = "FullFactorial")
-```
-
-### Parallel Execution
-
-```{r parallel}
-# Enable parallel execution for faster computation
-fzc(
-  parallel = TRUE,
-  n_cores = 4
 )
 ```
 
-## Best Practices
+You can also use an installed model alias (a string) instead of an inline dict:
 
-1. **Start small**: Test with a few samples before running large DoE
-2. **Validate models**: Ensure Modelica models compile and run independently
-3. **Check ranges**: Verify input ranges are physically meaningful
-4. **Monitor convergence**: For optimization, check convergence criteria
-5. **Save results**: Store results for reproducibility
+```{r model_alias}
+fzl()$models  # lists installed aliases, e.g. "PerfectGas"
+```
+
+## Basic workflow
+
+The typical fz workflow has four steps.
+
+### Step 1 — Inspect the template
+
+`fzi` parses the template and returns the variable names together with their
+default values:
+
+```{r fzi}
+vars <- fzi("input.txt", model)
+# $P [1] 1.013
+# $V [1] 22.4
+# $n [1] 1.0
+```
+
+### Step 2 — Compile (substitute values)
+
+`fzc` writes one copy of the input file per parameter combination into
+`output_dir`. Each copy goes into a subdirectory named
+`var1=val1,var2=val2,...`:
+
+```{r fzc_single}
+# Single case
+fzc("input.txt", list(P = 2.0, V = 11.2), model, output_dir = "compiled")
+# writes: compiled/P=2,V=11.2/input.txt  (placeholder replaced with 2.0 / 11.2)
+```
+
+Supply vectors to generate a full-factorial grid:
+
+```{r fzc_grid}
+# 2 x 3 = 6 cases
+fzc("input.txt",
+    list(P = c(1.0, 2.0), V = c(10.0, 20.0, 30.0)),
+    model,
+    output_dir = "compiled")
+```
+
+### Step 3 — Run the model and collect outputs
+
+`fzr` wraps steps 1–3 and output collection into a single call. It compiles
+the template, runs the calculator for every case, and returns a data frame:
+
+```{r fzr}
+results <- fzr(
+  "input.txt",
+  list(P = c(1.0, 2.0, 3.0), V = 22.4),   # 3 cases (V fixed)
+  model,
+  results_dir = "results",
+  calculators = "sh://bash run.sh"           # run.sh executes the simulator
+)
+
+# results is a data frame:
+#     P    V  pressure
+# 1  1.0  22.4   ...
+# 2  2.0  22.4   ...
+# 3  3.0  22.4   ...
+```
+
+The `calculators` argument accepts:
+
+- `"sh://bash run.sh"` — run a local shell command
+- `"sh://"` — execute the input file directly as a shell script
+- `"ssh://user@host"` — run over SSH
+
+### Step 4 — Read outputs from existing directories
+
+If you already ran the simulator externally, `fzo` reads the output files:
+
+```{r fzo}
+values <- fzo("results/P=2,V=22.4", model)
+# $pressure [1] "2.026"
+
+# Glob to read all cases at once:
+all_values <- fzo("results/*", model)
+```
+
+## Algorithm-driven design of experiments
+
+`fzd` runs an adaptive experiment: the algorithm decides which parameter
+combinations to evaluate based on previous results. Input variable ranges use
+`"[min;max]"` strings:
+
+```{r fzd}
+result <- fzd(
+  "input.txt",
+  list(P = "[1;5]", V = "[10;30]"),
+  model,
+  output_expression = "pressure",
+  algorithm         = "algorithms/montecarlo_uniform.py",
+  algorithm_options = "batch_sample_size=10;max_iterations=5;seed=42"
+)
+```
+
+Algorithms are Python files; `fz` ships several in `algorithms/` (Monte Carlo,
+surrogate-based optimisation, …). You can also write your own.
+
+## Listing installed models
+
+`fzl` shows which model aliases and calculators are installed in `~/.fz/`:
+
+```{r fzl}
+info <- fzl()
+names(info$models)       # e.g. c("PerfectGas", "Moret")
+names(info$calculators)  # e.g. c("sh://")
+
+# Filter by pattern
+fzl(models = "Perfect*")
+
+# Probe calculators to verify they are reachable
+fzl(check = TRUE)
+```
+
+## Best practices
+
+1. **Test with `fzi` first** — verify the correct variable names are found
+   before running anything.
+2. **Use `fzc` for a dry run** — inspect compiled files to confirm placeholder
+   substitution is correct.
+3. **Start small** — run a handful of cases before launching a large sweep.
+4. **Save results** — persist the data frame for reproducibility.
 
 ```{r save_results}
-# Save results to file
 saveRDS(results, "fz_results.rds")
-
-# Export to CSV for analysis in other tools
 write.csv(results, "fz_results.csv", row.names = FALSE)
 ```
 
 ## Troubleshooting
 
-### Common Issues
+**`fz` Python package not found:**
 
-**Python package not found:**
-```{r troubleshoot1}
-# Reinstall fz Python package
-fz_install()
+```{r troubleshoot_install}
+fz_install()         # install funz-fz into the reticulate environment
+fz_available()       # should return TRUE afterwards
 ```
 
-**Modelica compilation errors:**
-- Check that the Modelica model path is correct
-- Ensure the model compiles in your Modelica environment
-- Verify all dependencies are available
+**Variables not found in template:**
+Check that `varprefix` and `delim` in your model dict match the syntax used in
+your template file. Run `fzi` and inspect the returned list.
 
-**Slow execution:**
-- Reduce number of samples
-- Enable parallel execution
-- Use faster optimization algorithms for initial exploration
+**Calculator errors:**
+Run the simulator manually on one compiled directory to confirm it works before
+using `fzr`.
 
-## Further Reading
+## Further reading
 
-- Funz documentation: [https://funz.github.io](https://funz.github.io)
-- Modelica language: [https://modelica.org](https://modelica.org)
-- Design of Experiments: See references on DoE methods
+- funz-fz documentation: <https://funz.github.io>
+- reticulate: <https://rstudio.github.io/reticulate/>
 
-## Session Info
+## Session info
 
 ```{r session_info}
 sessionInfo()
