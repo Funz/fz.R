@@ -178,7 +178,7 @@ result <- fzd(
 ```
 
 Algorithms are Python files; `fz` ships several in `algorithms/` (Monte Carlo,
-surrogate-based optimisation, …). You can also write your own.
+surrogate-based optimization, …). You can also write your own.
 
 ## Listing installed models
 

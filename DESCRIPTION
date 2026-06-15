@@ -1,16 +1,22 @@
 Package: fz
 Type: Package
-Title: R Wrapper for Fz Core Functions
+Title: R Wrapper for the 'funz-fz' Parametric Simulation Framework
 Version: 0.1.0
 Authors@R: c(
-    person("Author", "Name", email = "author@example.com", role = c("aut", "cre"))
+    person("Yann", "Richet", email = "yann.richet@asnr.fr",
+           role = c("aut", "cre"))
     )
-Description: Provides R bindings to fz core functions using reticulate.
-    This package allows R users to access fz functionality directly from R.
+Description: Provides R bindings to the 'funz-fz' Python package using
+    'reticulate'. The 'fz' framework wraps arbitrary simulation codes to run
+    parameter sweeps, design-of-experiments studies, and iterative
+    algorithm-driven analyses by substituting variable placeholders in text
+    input files and collecting outputs into data frames. Calculators can run
+    locally (shell), over SSH, or on SLURM clusters.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
+Language: en-US
 RoxygenNote: 7.3.3
+SystemRequirements: Python (>= 3.8), funz-fz Python package
 Imports:
     reticulate (>= 1.28)
 Suggests:

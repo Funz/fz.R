@@ -204,14 +204,14 @@ fzl <- function(models = "*", calculators = "*", check = FALSE) {
 #' Runs an iterative design of experiments driven by an algorithm.
 #' Unlike \code{\link{fzr}} (which evaluates a fixed grid), \code{fzd} lets an
 #' algorithm adaptively choose which parameter combinations to evaluate, which
-#' is useful for sensitivity analysis, surrogate-model fitting, or optimisation.
+#' is useful for sensitivity analysis, surrogate-model fitting, or optimization.
 #'
 #' @param input_path Path to input file or directory.
 #' @param input_variables Named list of variable range strings of the form
 #'   \code{"[min;max]"}, e.g. \code{list(x = "[0;1]", y = "[-5;5]")}.
 #' @param model Model definition dict or alias string.
 #' @param output_expression Expression evaluated on the model outputs to
-#'   produce the scalar quantity the algorithm optimises or analyses,
+#'   produce the scalar quantity the algorithm optimizes or analyses,
 #'   e.g. \code{"result"} or \code{"out1 + 2 * out2"}.
 #' @param algorithm Path to the algorithm Python file, e.g.
 #'   \code{"algorithms/montecarlo_uniform.py"}.
