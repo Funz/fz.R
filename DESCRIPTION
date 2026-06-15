@@ -1,10 +1,10 @@
 Package: fz
 Type: Package
 Title: R Wrapper for the 'funz-fz' Parametric Simulation Framework
-Version: 0.1.0
+Version: 1.1
 Authors@R: c(
     person("Yann", "Richet", email = "yann.richet@asnr.fr",
-           role = c("aut", "cre"))
+           role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5677-8458"))
     )
 Description: Provides R bindings to the 'funz-fz' Python package using
     'reticulate'. The 'fz' framework wraps arbitrary simulation codes to run
