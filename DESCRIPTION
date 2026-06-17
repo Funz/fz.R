@@ -11,7 +11,7 @@ Description: Provides R bindings to the 'funz-fz' Python package using
     parameter sweeps, design-of-experiments studies, and iterative
     algorithm-driven analyses by substituting variable placeholders in text
     input files and collecting outputs into data frames. Calculators can run
-    locally (shell), over SSH, or on SLURM clusters.
+    locally (shell), over SSH, or on 'SLURM' clusters.
 License: BSD_3_clause + file LICENSE
 Encoding: UTF-8
 Language: en-US

@@ -44,7 +44,10 @@ fz_install <- function(method = "auto", conda = "auto", pip = TRUE, ...) {
 #' }
 #' }
 fz_available <- function() {
-  reticulate::py_module_available("fz")
+  if (is.null(.pkg$fz_available)) {
+    .pkg$fz_available <- reticulate::py_module_available("fz")
+  }
+  .pkg$fz_available
 }
 
 #' Install a Model

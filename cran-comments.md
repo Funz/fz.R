@@ -1,10 +1,13 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 1 warning | 1 note
 
-(Local check shows 1 WARNING about `qpdf` not being installed on this machine,
-and 1 NOTE about timestamp verification — both are environment-only and will
-not appear on CRAN infrastructure.)
+- WARNING: 'qpdf' is needed for checks on size reduction of PDFs.
+  `qpdf` is not installed on this development machine; the package
+  contains no PDFs and this will not appear on CRAN infrastructure.
+
+- NOTE: unable to verify current time.
+  Caused by network restrictions on this machine; not a package issue.
 
 ## Downstream dependencies
 

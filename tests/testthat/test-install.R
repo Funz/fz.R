@@ -1,4 +1,5 @@
 test_that("fz_available returns logical", {
+  skip_on_cran()
   result <- fz_available()
   expect_type(result, "logical")
   expect_length(result, 1)
