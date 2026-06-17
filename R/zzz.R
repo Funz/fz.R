@@ -1,17 +1,15 @@
-# Package-level variables
-.fz <- NULL
+.pkg <- new.env(parent = emptyenv())
+.pkg$fz <- NULL
+.pkg$fz_available <- NULL
 
 .onLoad <- function(libname, pkgname) {
-  # Delay loading of Python module until first use
-  if (reticulate::py_module_available("fz")) {
-    .fz <<- reticulate::import("fz", delay_load = TRUE)
-  }
+  # Python is not initialised at load time — deferred to first use via get_fz().
 }
 
 #' @keywords internal
 get_fz <- function() {
-  if (is.null(.fz)) {
-    if (!reticulate::py_module_available("fz")) {
+  if (is.null(.pkg$fz)) {
+    if (!fz_available()) {
       stop(
         "The 'fz' Python package is not available. ",
         "Install it with fz_install() or manually with: ",
@@ -19,7 +17,7 @@ get_fz <- function() {
         call. = FALSE
       )
     }
-    .fz <<- reticulate::import("fz", delay_load = TRUE)
+    .pkg$fz <- reticulate::import("fz", delay_load = TRUE)
   }
-  .fz
+  .pkg$fz
 }
