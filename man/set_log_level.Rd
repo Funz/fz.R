@@ -17,11 +17,11 @@ NULL (invisibly). Called for side effects.
 Controls how much output fz emits during execution.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
-  set_log_level("DEBUG")    # maximum verbosity
-  set_log_level("WARNING")  # default
-  set_log_level("ERROR")    # errors only
+  set_log_level("DEBUG")
+  set_log_level("WARNING")
+  set_log_level("ERROR")
 }
 }
 }

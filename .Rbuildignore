@@ -10,3 +10,5 @@
 ^\.claude$
 ^cran-comments\.md$
 ^tests/testthat/\.fz$
+^doc$
+^Meta$

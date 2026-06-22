@@ -7,9 +7,9 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
-#'   get_interpreter()  # e.g. "python"
+#'   get_interpreter()
 #' }
 #' }
 get_interpreter <- function() {
@@ -27,10 +27,10 @@ get_interpreter <- function() {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
-#'   set_interpreter("R")      # evaluate formulas with R
-#'   set_interpreter("python") # evaluate formulas with Python (default)
+#'   set_interpreter("R")
+#'   set_interpreter("python")
 #' }
 #' }
 set_interpreter <- function(interpreter) {
@@ -46,9 +46,9 @@ set_interpreter <- function(interpreter) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
-#'   as.character(get_log_level())  # e.g. "WARNING"
+#'   as.character(get_log_level())
 #' }
 #' }
 get_log_level <- function() {
@@ -66,11 +66,11 @@ get_log_level <- function() {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
-#'   set_log_level("DEBUG")    # maximum verbosity
-#'   set_log_level("WARNING")  # default
-#'   set_log_level("ERROR")    # errors only
+#'   set_log_level("DEBUG")
+#'   set_log_level("WARNING")
+#'   set_log_level("ERROR")
 #' }
 #' }
 set_log_level <- function(level) {
@@ -88,7 +88,7 @@ set_log_level <- function(level) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   cfg <- get_config()
 #'   cfg$max_workers
@@ -108,7 +108,7 @@ get_config <- function() {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   print_config()
 #' }
@@ -127,11 +127,11 @@ print_config <- function() {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   Sys.setenv(FZ_MAX_WORKERS = "8")
 #'   reload_config()
-#'   get_config()$max_workers  # now 8
+#'   get_config()$max_workers
 #' }
 #' }
 reload_config <- function() {

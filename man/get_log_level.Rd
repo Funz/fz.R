@@ -14,9 +14,9 @@ such as \code{"DEBUG"}, \code{"INFO"}, \code{"WARNING"}, \code{"ERROR"}).
 Returns the current logging verbosity level.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
-  as.character(get_log_level())  # e.g. "WARNING"
+  as.character(get_log_level())
 }
 }
 }

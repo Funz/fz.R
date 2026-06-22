@@ -14,9 +14,9 @@ Returns the global formula interpreter used when evaluating formula
 expressions inside template files (e.g. \code{"python"} or \code{"R"}).
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
-  get_interpreter()  # e.g. "python"
+  get_interpreter()
 }
 }
 }

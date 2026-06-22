@@ -6,7 +6,7 @@
 \alias{fz-package}
 \title{fz: R Wrapper for the 'funz-fz' Parametric Simulation Framework}
 \description{
-Provides R bindings to the 'funz-fz' Python package using 'reticulate'. The 'fz' framework wraps arbitrary simulation codes to run parameter sweeps, design-of-experiments studies, and iterative algorithm-driven analyses by substituting variable placeholders in text input files and collecting outputs into data frames. Calculators can run locally (shell), over SSH, or on SLURM clusters.
+Provides R bindings to the 'funz-fz' Python package using 'reticulate'. The 'fz' framework wraps arbitrary simulation codes to run parameter sweeps, design-of-experiments studies, and iterative algorithm-driven analyses by substituting variable placeholders in text input files and collecting outputs into data frames. Calculators can run locally (shell), over SSH, or on 'SLURM' clusters. See \url{https://github.com/Funz/fz} for the underlying framework.
 }
 \seealso{
 Useful links:

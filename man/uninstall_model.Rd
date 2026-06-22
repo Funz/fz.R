@@ -18,7 +18,7 @@ uninstall_model(model_name, global = FALSE)
 Removes a previously installed model from \code{~/.fz/models/}.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   uninstall_model("PerfectGas")
 }

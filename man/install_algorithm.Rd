@@ -22,7 +22,7 @@ into the user-level \code{~/.fz/algorithms/} directory (or system-level when
 \code{global = TRUE}).
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   install_algorithm("Funz/Algorithm-MonteCarlo")
 }
