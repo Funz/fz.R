@@ -14,7 +14,7 @@ Checks whether the fz Python package is available in the current
 Python environment.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   message("fz is available!")
 } else {

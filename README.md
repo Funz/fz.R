@@ -139,4 +139,4 @@ Contributions are welcome. Please open a Pull Request or file an issue at
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+BSD 3-Clause — see [LICENSE](LICENSE.md).

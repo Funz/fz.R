@@ -19,7 +19,7 @@ Generic alias: removes a model by name.
 Equivalent to \code{\link{uninstall_model}}.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   uninstall("PerfectGas")
 }

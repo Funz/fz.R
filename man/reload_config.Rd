@@ -15,11 +15,11 @@ configuration. Useful after changing environment variables within the
 session.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   Sys.setenv(FZ_MAX_WORKERS = "8")
   reload_config()
-  get_config()$max_workers  # now 8
+  get_config()$max_workers
 }
 }
 }

@@ -48,7 +48,7 @@ algorithm adaptively choose which parameter combinations to evaluate, which
 is useful for sensitivity analysis, surrogate-model fitting, or optimization.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   tf <- tempfile(fileext = ".txt")
   writeLines(c("x = ${x~0}", "y = ${y~0}"), tf)
@@ -58,7 +58,6 @@ if (fz_available()) {
     output = list(z = "grep z output.txt | cut -d= -f2")
   )
 
-  # Run 30 Monte Carlo samples over x in [0,1] and y in [-5,5]
   result <- fzd(
     tf,
     list(x = "[0;1]", y = "[-5;5]"),

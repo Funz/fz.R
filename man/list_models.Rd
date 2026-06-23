@@ -16,7 +16,7 @@ Named list of installed model definitions.
 Alias for \code{\link{list_installed_models}}.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   names(list_models())
 }

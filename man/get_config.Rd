@@ -16,7 +16,7 @@ variables such as \code{FZ_LOG_LEVEL}, \code{FZ_MAX_WORKERS},
 \code{FZ_MAX_RETRIES}, and \code{FZ_SHELL_PATH}.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   cfg <- get_config()
   cfg$max_workers

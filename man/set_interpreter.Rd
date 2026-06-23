@@ -17,10 +17,10 @@ Sets the global formula interpreter for evaluating expressions inside
 template files.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
-  set_interpreter("R")      # evaluate formulas with R
-  set_interpreter("python") # evaluate formulas with Python (default)
+  set_interpreter("R")
+  set_interpreter("python")
 }
 }
 }

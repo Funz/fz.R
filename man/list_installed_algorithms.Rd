@@ -16,7 +16,7 @@ Named list of installed algorithm definitions.
 Returns details of all algorithms installed in \code{~/.fz/algorithms/}.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   algos <- list_installed_algorithms()
   names(algos)

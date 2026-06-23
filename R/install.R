@@ -36,7 +36,7 @@ fz_install <- function(method = "auto", conda = "auto", pip = TRUE, ...) {
 #' @importFrom reticulate py_module_available
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   message("fz is available!")
 #' } else {
@@ -65,7 +65,7 @@ fz_available <- function() {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   install_model("Funz/Model-PerfectGas")
 #' }
@@ -90,7 +90,7 @@ install_model <- function(source, global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   install_algorithm("Funz/Algorithm-MonteCarlo")
 #' }
@@ -111,7 +111,7 @@ install_algorithm <- function(source, global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   uninstall_model("PerfectGas")
 #' }
@@ -132,7 +132,7 @@ uninstall_model <- function(model_name, global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   uninstall_algorithm("MonteCarlo")
 #' }
@@ -152,10 +152,10 @@ uninstall_algorithm <- function(algorithm_name, global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   models <- list_installed_models()
-#'   names(models)  # e.g. c("PerfectGas")
+#'   names(models)
 #' }
 #' }
 list_installed_models <- function(global = FALSE) {
@@ -173,7 +173,7 @@ list_installed_models <- function(global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   algos <- list_installed_algorithms()
 #'   names(algos)
@@ -193,7 +193,7 @@ list_installed_algorithms <- function(global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   names(list_models())
 #' }
@@ -212,7 +212,7 @@ list_models <- function(global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   install("Funz/Model-PerfectGas")
 #' }
@@ -232,7 +232,7 @@ install <- function(source, global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   uninstall("PerfectGas")
 #' }

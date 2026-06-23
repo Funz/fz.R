@@ -16,10 +16,10 @@ Named list of installed model definitions.
 Returns details of all models installed in \code{~/.fz/models/}.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   models <- list_installed_models()
-  names(models)  # e.g. c("PerfectGas")
+  names(models)
 }
 }
 }

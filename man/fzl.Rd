@@ -26,17 +26,13 @@ Named list with two entries:
 Lists installed models and available calculators.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
-  # List everything
   info <- fzl()
-  names(info$models)       # e.g. c("PerfectGas", "Moret")
-  names(info$calculators)  # e.g. c("sh://")
+  names(info$models)
+  names(info$calculators)
 
-  # Check only models whose name starts with "Perfect"
   info <- fzl(models = "Perfect*")
-
-  # Probe calculators to verify they are reachable
   info <- fzl(check = TRUE)
 }
 }

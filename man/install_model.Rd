@@ -22,7 +22,7 @@ the user-level \code{~/.fz/models/} directory (or system-level when
 \code{global = TRUE}).
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   install_model("Funz/Model-PerfectGas")
 }

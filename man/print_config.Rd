@@ -14,7 +14,7 @@ Prints all fz configuration values in a human-readable format, including
 which settings come from environment variables.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   print_config()
 }

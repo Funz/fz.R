@@ -9,9 +9,8 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
-#'   # Write a template with two variables and their defaults
 #'   tf <- tempfile(fileext = ".txt")
 #'   writeLines(c("pressure = ${P~1.013}", "volume = ${V~22.4}"), tf)
 #'
@@ -19,10 +18,6 @@
 #'                 commentline = "#")
 #'
 #'   vars <- fzi(tf, model)
-#'   # vars$P == 1.013, vars$V == 22.4
-#'
-#'   # Using an installed model alias instead of an inline dict:
-#'   # vars <- fzi(tf, "PerfectGas")
 #' }
 #' }
 fzi <- function(input_path, model) {
@@ -46,7 +41,7 @@ fzi <- function(input_path, model) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   tf <- tempfile(fileext = ".txt")
 #'   writeLines(c("P = ${P~1.013}", "V = ${V~22.4}"), tf)
@@ -55,10 +50,7 @@ fzi <- function(input_path, model) {
 #'                 commentline = "#")
 #'   out <- tempfile()
 #'
-#'   # Single case: one compiled directory P=2,V=11.2
 #'   fzc(tf, list(P = 2.0, V = 11.2), model, out)
-#'
-#'   # Grid: 2 x 2 = 4 compiled directories
 #'   fzc(tf, list(P = c(1.0, 2.0), V = c(11.2, 22.4)), model, out)
 #' }
 #' }
@@ -81,10 +73,11 @@ fzc <- function(input_path, input_variables, model, output_dir = "output") {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
-#'   # After running a simulation that wrote "result = 42" to output.txt:
-#'   out_dir <- "my_results/P=2,V=11.2"
+#'   out_dir <- file.path(tempdir(), "P=2,V=11.2")
+#'   dir.create(out_dir, recursive = TRUE)
+#'   writeLines("result = 42", file.path(out_dir, "output.txt"))
 #'
 #'   model <- list(
 #'     varprefix = "$", delim = "{}", formulaprefix = "@", commentline = "#",
@@ -92,10 +85,6 @@ fzc <- function(input_path, input_variables, model, output_dir = "output") {
 #'   )
 #'
 #'   values <- fzo(out_dir, model)
-#'   # values$result == "42"
-#'
-#'   # Glob to read all cases at once:
-#'   # values <- fzo("my_results/*", model)
 #' }
 #' }
 fzo <- function(output_path, model) {
@@ -128,9 +117,8 @@ fzo <- function(output_path, model) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
-#'   # Template: shell script that writes sum of x and y
 #'   tf <- tempfile(fileext = ".sh")
 #'   writeLines(c(
 #'     "#!/bin/sh",
@@ -142,13 +130,8 @@ fzo <- function(output_path, model) {
 #'     output = list(result = "grep result output.txt | cut -d= -f2")
 #'   )
 #'
-#'   # Two values of x, one value of y -> 2 cases
 #'   results <- fzr(tf, list(x = c(1L, 2L), y = 3L), model,
 #'                  calculators = "sh://bash input.sh")
-#'   # results is a data frame with columns x, y, result
-#'
-#'   # Using an installed model alias:
-#'   # results <- fzr("input.txt", list(P = c(1, 2, 3)), "PerfectGas")
 #' }
 #' }
 fzr <- function(input_path, input_variables, model,
@@ -180,17 +163,13 @@ fzr <- function(input_path, input_variables, model,
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
-#'   # List everything
 #'   info <- fzl()
-#'   names(info$models)       # e.g. c("PerfectGas", "Moret")
-#'   names(info$calculators)  # e.g. c("sh://")
+#'   names(info$models)
+#'   names(info$calculators)
 #'
-#'   # Check only models whose name starts with "Perfect"
 #'   info <- fzl(models = "Perfect*")
-#'
-#'   # Probe calculators to verify they are reachable
 #'   info <- fzl(check = TRUE)
 #' }
 #' }
@@ -225,7 +204,7 @@ fzl <- function(models = "*", calculators = "*", check = FALSE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (fz_available()) {
 #'   tf <- tempfile(fileext = ".txt")
 #'   writeLines(c("x = ${x~0}", "y = ${y~0}"), tf)
@@ -235,7 +214,6 @@ fzl <- function(models = "*", calculators = "*", check = FALSE) {
 #'     output = list(z = "grep z output.txt | cut -d= -f2")
 #'   )
 #'
-#'   # Run 30 Monte Carlo samples over x in [0,1] and y in [-5,5]
 #'   result <- fzd(
 #'     tf,
 #'     list(x = "[0;1]", y = "[-5;5]"),

@@ -45,9 +45,8 @@ parameter combination, runs the model via the calculator(s), and collects
 all outputs into a data frame.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
-  # Template: shell script that writes sum of x and y
   tf <- tempfile(fileext = ".sh")
   writeLines(c(
     "#!/bin/sh",
@@ -59,13 +58,8 @@ if (fz_available()) {
     output = list(result = "grep result output.txt | cut -d= -f2")
   )
 
-  # Two values of x, one value of y -> 2 cases
   results <- fzr(tf, list(x = c(1L, 2L), y = 3L), model,
                  calculators = "sh://bash input.sh")
-  # results is a data frame with columns x, y, result
-
-  # Using an installed model alias:
-  # results <- fzr("input.txt", list(P = c(1, 2, 3)), "PerfectGas")
 }
 }
 }

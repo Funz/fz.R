@@ -18,7 +18,7 @@ uninstall_algorithm(algorithm_name, global = FALSE)
 Removes a previously installed algorithm from \code{~/.fz/algorithms/}.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   uninstall_algorithm("MonteCarlo")
 }

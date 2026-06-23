@@ -18,9 +18,8 @@ Named list with variable names and their default values (or NULL).
 Parses input file(s) to find variables, formulas, and static objects.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
-  # Write a template with two variables and their defaults
   tf <- tempfile(fileext = ".txt")
   writeLines(c("pressure = ${P~1.013}", "volume = ${V~22.4}"), tf)
 
@@ -28,10 +27,6 @@ if (fz_available()) {
                 commentline = "#")
 
   vars <- fzi(tf, model)
-  # vars$P == 1.013, vars$V == 22.4
-
-  # Using an installed model alias instead of an inline dict:
-  # vars <- fzi(tf, "PerfectGas")
 }
 }
 }

@@ -21,10 +21,11 @@ Each matched directory is processed independently; the results are combined
 into a single list or data frame.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
-  # After running a simulation that wrote "result = 42" to output.txt:
-  out_dir <- "my_results/P=2,V=11.2"
+  out_dir <- file.path(tempdir(), "P=2,V=11.2")
+  dir.create(out_dir, recursive = TRUE)
+  writeLines("result = 42", file.path(out_dir, "output.txt"))
 
   model <- list(
     varprefix = "$", delim = "{}", formulaprefix = "@", commentline = "#",
@@ -32,10 +33,6 @@ if (fz_available()) {
   )
 
   values <- fzo(out_dir, model)
-  # values$result == "42"
-
-  # Glob to read all cases at once:
-  # values <- fzo("my_results/*", model)
 }
 }
 }

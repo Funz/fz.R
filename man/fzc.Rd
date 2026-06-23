@@ -25,7 +25,7 @@ Each unique combination of values is written to its own subdirectory inside
 \code{output_dir}, named \code{var1=val1,var2=val2,...}.
 }
 \examples{
-\dontrun{
+\donttest{
 if (fz_available()) {
   tf <- tempfile(fileext = ".txt")
   writeLines(c("P = ${P~1.013}", "V = ${V~22.4}"), tf)
@@ -34,10 +34,7 @@ if (fz_available()) {
                 commentline = "#")
   out <- tempfile()
 
-  # Single case: one compiled directory P=2,V=11.2
   fzc(tf, list(P = 2.0, V = 11.2), model, out)
-
-  # Grid: 2 x 2 = 4 compiled directories
   fzc(tf, list(P = c(1.0, 2.0), V = c(11.2, 22.4)), model, out)
 }
 }
