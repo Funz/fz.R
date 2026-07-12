@@ -98,12 +98,40 @@ if (fz_available()) {
     output = list(z = "grep z output.txt | cut -d= -f2")
   )
 
+  # A minimal self-contained random-sampling algorithm (see
+  # https://github.com/Funz/fz for ready-made algorithms to install)
+  algo <- tempfile(fileext = ".py")
+  writeLines(c(
+    "import random",
+    "class RandomSampler:",
+    "    def __init__(self, **options):",
+    "        self.batch = int(options.get('batch_sample_size', 5))",
+    "        self.max_iterations = int(options.get('max_iterations', 3))",
+    "        self.iteration = 0",
+    "        self.input_vars = {}",
+    "    def get_initial_design(self, input_vars, output_vars):",
+    "        self.input_vars = input_vars",
+    "        self.iteration = 1",
+    "        return [{k: random.uniform(*v) for k, v in input_vars.items()}",
+    "                for _ in range(self.batch)]",
+    "    def get_next_design(self, previous_input_vars, previous_output_values):",
+    "        self.iteration += 1",
+    "        if self.iteration > self.max_iterations:",
+    "            return []",
+    "        return [{k: random.uniform(*v) for k, v in self.input_vars.items()}",
+    "                for _ in range(self.batch)]",
+    "    def get_analysis(self, input_vars, output_values):",
+    "        valid = [v for v in output_values if v is not None]",
+    "        mean = sum(valid) / len(valid) if valid else None",
+    "        return {'text': f'mean={mean}', 'data': {'mean': mean}}"
+  ), algo)
+
   result <- fzd(
     tf,
     list(x = "[0;1]", y = "[-5;5]"),
     model,
     output_expression = "z",
-    algorithm        = "algorithms/montecarlo_uniform.py",
+    algorithm        = algo,
     algorithm_options = list(batch_sample_size = 10, max_iterations = 3)
   )
 }
