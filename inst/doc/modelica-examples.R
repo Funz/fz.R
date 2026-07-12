@@ -76,7 +76,7 @@ knitr::opts_chunk$set(
 #    model,
 #    output_expression = "pressure",
 #    algorithm         = "algorithms/montecarlo_uniform.py",
-#    algorithm_options = "batch_sample_size=10;max_iterations=5;seed=42"
+#    algorithm_options = list(batch_sample_size = 10, max_iterations = 5, seed = 42)
 #  )
 
 ## ----fzl----------------------------------------------------------------------

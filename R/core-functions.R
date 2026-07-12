@@ -202,9 +202,8 @@ fzl <- function(models = "*", calculators = "*", check = FALSE) {
 #'   \code{model} is a function, this must be a single integer (default
 #'   \code{1L}), accepted for API compatibility (see "Direct function model"
 #'   below) — calls are always run sequentially regardless of its value.
-#' @param algorithm_options Algorithm options as a named list or
-#'   semicolon-separated string, e.g. \code{"batch_sample_size=10;seed=42"}.
-#'   Default \code{NULL}.
+#' @param algorithm_options Algorithm options as a named list, a JSON string,
+#'   or a path to a JSON file. Default \code{NULL}.
 #' @param analysis_dir Analysis directory. Default \code{"analysis"}.
 #'
 #' @section Direct function model:
@@ -259,7 +258,7 @@ fzl <- function(models = "*", calculators = "*", check = FALSE) {
 #'     model,
 #'     output_expression = "z",
 #'     algorithm        = "algorithms/montecarlo_uniform.py",
-#'     algorithm_options = "batch_sample_size=10;max_iterations=3"
+#'     algorithm_options = list(batch_sample_size = 10, max_iterations = 3)
 #'   )
 #' }
 #' }

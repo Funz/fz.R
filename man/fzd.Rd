@@ -39,9 +39,8 @@ value is used.}
 \code{1L}), accepted for API compatibility (see "Direct function model"
 below) — calls are always run sequentially regardless of its value.}
 
-\item{algorithm_options}{Algorithm options as a named list or
-semicolon-separated string, e.g. \code{"batch_sample_size=10;seed=42"}.
-Default \code{NULL}.}
+\item{algorithm_options}{Algorithm options as a named list, a JSON string,
+or a path to a JSON file. Default \code{NULL}.}
 
 \item{analysis_dir}{Analysis directory. Default \code{"analysis"}.}
 }
@@ -105,7 +104,7 @@ if (fz_available()) {
     model,
     output_expression = "z",
     algorithm        = "algorithms/montecarlo_uniform.py",
-    algorithm_options = "batch_sample_size=10;max_iterations=3"
+    algorithm_options = list(batch_sample_size = 10, max_iterations = 3)
   )
 }
 }

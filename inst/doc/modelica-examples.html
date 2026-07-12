@@ -484,7 +484,7 @@ Input variable ranges use <code>&quot;[min;max]&quot;</code> strings:</p>
 <span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  model,</span>
 <span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">output_expression =</span> <span class="st">&quot;pressure&quot;</span>,</span>
 <span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="at">algorithm         =</span> <span class="st">&quot;algorithms/montecarlo_uniform.py&quot;</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="at">algorithm_options =</span> <span class="st">&quot;batch_sample_size=10;max_iterations=5;seed=42&quot;</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="at">algorithm_options =</span> <span class="fu">list</span>(<span class="at">batch_sample_size =</span> <span class="dv">10</span>, <span class="at">max_iterations =</span> <span class="dv">5</span>, <span class="at">seed =</span> <span class="dv">42</span>)</span>
 <span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>)</span></code></pre></div>
 <p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
 <p>Algorithms are Python files; <code>fz</code> ships several in

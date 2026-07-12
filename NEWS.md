@@ -14,6 +14,17 @@
   regardless of `calculators`.
 * `fz_install()` gains a `packages` argument (default `"funz-fz"`) so the
   latest `main` branch can be installed instead of the PyPI release.
+* Fixed `fzd()`'s own `algorithm_options` example/documentation, which used
+  a `"key=val;key2=val2"` string that `funz-fz` has never actually accepted
+  (only a named list, JSON string, or path to a JSON file) — replaced with
+  a named list. CI never caught this because it was silently exercising the
+  wrong Python module (see CI fixes below).
+* Restored the `LICENSE` file (the templated file R's packaging convention
+  requires alongside `License: BSD_3_clause + file LICENSE`), which had been
+  mistakenly deleted, and fixed `R-CMD-check` CI to install `funz-fz` and
+  point `reticulate` at it via `RETICULATE_PYTHON` — without this,
+  `reticulate`'s automatic environment provisioning was silently resolving
+  to an unrelated PyPI package literally named `fz` (not `funz-fz`).
 
 # fz 1.1
 
