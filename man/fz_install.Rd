@@ -4,9 +4,20 @@
 \alias{fz_install}
 \title{Install the fz Python Package}
 \usage{
-fz_install(method = "auto", conda = "auto", pip = TRUE, ...)
+fz_install(
+  packages = "funz-fz",
+  method = "auto",
+  conda = "auto",
+  pip = TRUE,
+  ...
+)
 }
 \arguments{
+\item{packages}{Package specification passed to \code{\link[reticulate:py_install]{reticulate::py_install()}}.
+Default \code{"funz-fz"} installs the latest release from PyPI. To track
+unreleased features, install the latest \code{main} branch directly from
+GitHub with \code{"git+https://github.com/Funz/fz.git"}.}
+
 \item{method}{Installation method. Either "auto", "virtualenv", or "conda".}
 
 \item{conda}{Path to conda executable. Only used when method is "conda".}
@@ -29,5 +40,8 @@ fz_install()
 
 # Install in a conda environment
 fz_install(method = "conda")
+
+# Track the latest main branch on GitHub (unreleased features)
+fz_install(packages = "git+https://github.com/Funz/fz.git")
 }
 }

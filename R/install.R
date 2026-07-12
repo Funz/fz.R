@@ -3,6 +3,10 @@
 #' This function installs the fz Python package into a virtual environment
 #' or conda environment managed by reticulate.
 #'
+#' @param packages Package specification passed to [reticulate::py_install()].
+#'   Default \code{"funz-fz"} installs the latest release from PyPI. To track
+#'   unreleased features, install the latest \code{main} branch directly from
+#'   GitHub with \code{"git+https://github.com/Funz/fz.git"}.
 #' @param method Installation method. Either "auto", "virtualenv", or "conda".
 #' @param conda Path to conda executable. Only used when method is "conda".
 #' @param pip Logical; use pip for installation? Default is TRUE.
@@ -20,9 +24,12 @@
 #'
 #' # Install in a conda environment
 #' fz_install(method = "conda")
+#'
+#' # Track the latest main branch on GitHub (unreleased features)
+#' fz_install(packages = "git+https://github.com/Funz/fz.git")
 #' }
-fz_install <- function(method = "auto", conda = "auto", pip = TRUE, ...) {
-  reticulate::py_install("funz-fz", method = method, conda = conda, pip = pip, ...)
+fz_install <- function(packages = "funz-fz", method = "auto", conda = "auto", pip = TRUE, ...) {
+  reticulate::py_install(packages, method = method, conda = conda, pip = pip, ...)
 }
 
 #' Check if fz Python Package is Available
