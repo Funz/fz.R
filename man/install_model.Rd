@@ -22,9 +22,9 @@ the user-level \code{~/.fz/models/} directory (or system-level when
 \code{global = TRUE}).
 }
 \examples{
-\donttest{
-if (fz_available()) {
-  install_model("Funz/Model-PerfectGas")
-}
+\dontrun{
+# Requires the named GitHub repository to exist and network access;
+# not run automatically since neither is guaranteed in all environments.
+install_model("Funz/Model-PerfectGas")
 }
 }

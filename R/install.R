@@ -72,10 +72,10 @@ fz_available <- function() {
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' if (fz_available()) {
-#'   install_model("Funz/Model-PerfectGas")
-#' }
+#' \dontrun{
+#' # Requires the named GitHub repository to exist and network access;
+#' # not run automatically since neither is guaranteed in all environments.
+#' install_model("Funz/Model-PerfectGas")
 #' }
 install_model <- function(source, global = FALSE) {
   fz_module <- get_fz()
@@ -97,10 +97,10 @@ install_model <- function(source, global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' if (fz_available()) {
-#'   install_algorithm("Funz/Algorithm-MonteCarlo")
-#' }
+#' \dontrun{
+#' # Requires the named GitHub repository to exist and network access;
+#' # not run automatically since neither is guaranteed in all environments.
+#' install_algorithm("Funz/Algorithm-MonteCarlo")
 #' }
 install_algorithm <- function(source, global = FALSE) {
   fz_module <- get_fz()
@@ -219,10 +219,10 @@ list_models <- function(global = FALSE) {
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' if (fz_available()) {
-#'   install("Funz/Model-PerfectGas")
-#' }
+#' \dontrun{
+#' # Requires the named GitHub repository to exist and network access;
+#' # not run automatically since neither is guaranteed in all environments.
+#' install("Funz/Model-PerfectGas")
 #' }
 install <- function(source, global = FALSE) {
   install_model(source, global)

@@ -41,6 +41,16 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install fz Python package
+        run: pip install funz-fz
+
+      - name: Point reticulate at the CI Python
+        run: echo "RETICULATE_PYTHON=$(python3 -c 'import sys; print(sys.executable)')" >> "$GITHUB_ENV"
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
