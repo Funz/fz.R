@@ -1,3 +1,20 @@
+# fz (development version)
+
+* `fzd()` now accepts an R function as `model`, letting adaptive
+  design-of-experiments algorithms drive an R function directly instead of
+  a file-based model (`input_path = NULL`, `output_expression` optional,
+  `calculators` accepted as any single integer but currently always run
+  sequentially, one call at a time — see below). This requires the `main`
+  branch of `fz` on GitHub — install it with
+  `fz_install(packages = "git+https://github.com/Funz/fz.git")`, and needs
+  [Funz/fz#73](https://github.com/Funz/fz/pull/73) merged: R closures are
+  bridged in via `reticulate`, which is only safe to call from the main
+  thread, so `fz`'s function-model support was changed to always call the
+  model sequentially (like `lapply`) instead of via a Python thread pool,
+  regardless of `calculators`.
+* `fz_install()` gains a `packages` argument (default `"funz-fz"`) so the
+  latest `main` branch can be installed instead of the PyPI release.
+
 # fz 1.1
 
 First release, aligned with funz-fz 1.1 on PyPI.
