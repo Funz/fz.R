@@ -48,6 +48,18 @@ jobs:
       - name: Install fz Python package
         run: pip install funz-fz
 
+      - name: Debug reticulate Python resolution
+        run: |
+          Rscript -e '
+            reticulate::py_config()
+            cat("py_module_available(fz):", reticulate::py_module_available("fz"), "\n")
+            if (reticulate::py_module_available("fz")) {
+              m <- reticulate::import("fz")
+              cat("fz module file:", m[["__file__"]], "\n")
+              cat("fz module names:", paste(names(m), collapse = ", "), "\n")
+            }
+          '
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
