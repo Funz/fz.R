@@ -20,7 +20,7 @@ is useful for sensitivity analysis, surrogate-model fitting, or optimization."><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.9000</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@ is useful for sensitivity analysis, surrogate-model fitting, or optimization.</p
 <span>  <span class="va">input_path</span>,</span>
 <span>  <span class="va">input_variables</span>,</span>
 <span>  <span class="va">model</span>,</span>
-<span>  <span class="va">output_expression</span>,</span>
+<span>  output_expression <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">algorithm</span>,</span>
 <span>  calculators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  algorithm_options <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -86,7 +86,8 @@ is useful for sensitivity analysis, surrogate-model fitting, or optimization.</p
 
 
 <dl><dt id="arg-input-path">input_path<a class="anchor" aria-label="anchor" href="#arg-input-path"></a></dt>
-<dd><p>Path to input file or directory.</p></dd>
+<dd><p>Path to input file or directory. Must be <code>NULL</code> when
+<code>model</code> is an R function (see "Direct function model" below).</p></dd>
 
 
 <dt id="arg-input-variables">input_variables<a class="anchor" aria-label="anchor" href="#arg-input-variables"></a></dt>
@@ -95,13 +96,16 @@ is useful for sensitivity analysis, surrogate-model fitting, or optimization.</p
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p>Model definition dict or alias string.</p></dd>
+<dd><p>Model definition dict or alias string, or an R function (see
+"Direct function model" below).</p></dd>
 
 
 <dt id="arg-output-expression">output_expression<a class="anchor" aria-label="anchor" href="#arg-output-expression"></a></dt>
 <dd><p>Expression evaluated on the model outputs to
 produce the scalar quantity the algorithm optimizes or analyses,
-e.g. <code>"result"</code> or <code>"out1 + 2 * out2"</code>.</p></dd>
+e.g. <code>"result"</code> or <code>"out1 + 2 * out2"</code>. May be <code>NULL</code>
+only when <code>model</code> is a function, in which case the first output
+value is used.</p></dd>
 
 
 <dt id="arg-algorithm">algorithm<a class="anchor" aria-label="anchor" href="#arg-algorithm"></a></dt>
@@ -110,7 +114,10 @@ e.g. <code>"result"</code> or <code>"out1 + 2 * out2"</code>.</p></dd>
 
 
 <dt id="arg-calculators">calculators<a class="anchor" aria-label="anchor" href="#arg-calculators"></a></dt>
-<dd><p>Calculator specification(s). Default <code>NULL</code>.</p></dd>
+<dd><p>Calculator specification(s). Default <code>NULL</code>. When
+<code>model</code> is a function, this must be a single integer (default
+<code>1L</code>), accepted for API compatibility (see "Direct function model"
+below) — calls are always run sequentially regardless of its value.</p></dd>
 
 
 <dt id="arg-algorithm-options">algorithm_options<a class="anchor" aria-label="anchor" href="#arg-algorithm-options"></a></dt>
@@ -127,6 +134,38 @@ Default <code>NULL</code>.</p></dd>
     <h2>Value</h2>
     <p>Named list with the analysis results produced by the algorithm.</p>
     </div>
+    <div id="direct-function-model">
+    <h2>Direct function model</h2>
+
+
+<p>Instead of a file-based model, <code>model</code> can be an R function (this
+requires the <code>main</code> branch of <code>fz</code> from GitHub, installed with
+<code>fz_install(packages = "git+https://github.com/Funz/fz.git")</code> — this
+mode is not available in released PyPI versions of <code>funz-fz</code> yet). In
+this mode:</p><ul><li><p><code>input_path</code> must be <code>NULL</code> — there are no input files.</p></li>
+<li><p><code>input_variables</code> names must match the function's arguments.</p></li>
+<li><p><code>output_expression</code> may be <code>NULL</code>; the value used is then
+the first element of the function's return value (its return value
+directly if scalar, the first element if a vector/list, or the first
+entry's value if a named list).</p></li>
+<li><p><code>calculators</code> must be a single integer, accepted for API
+compatibility but currently without effect: on the <code>fz</code> side,
+function-model calls always run sequentially, one at a time in the
+calling thread — never through a thread pool. This is required
+because R functions are called back into the R session via
+<code>reticulate</code>, which is only safe from the main thread; running
+a Python-side thread pool (which always dispatches to a worker thread,
+even with a single worker) would call the function from a thread
+other than the main one and crash the R session. This safety fix
+requires <a href="https://github.com/Funz/fz/pull/73" class="external-link">Funz/fz#73</a> on the
+<code>fz</code> <code>main</code> branch (not yet in a PyPI release as of
+2026-07-12); without it, direct function models crash regardless of
+<code>calculators</code>. A value other than <code>1</code> emits a warning
+noting that it has no effect.</p></li>
+<li><p>each iteration's directory (<code>iterNNN/</code>) only contains a
+<code>values.csv</code> of that iteration's function inputs/outputs, since
+there is no file-based execution.</p></li>
+</ul></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -150,6 +189,23 @@ Default <code>NULL</code>.</p></dd>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># Direct function model (requires fz main branch from GitHub)</span></span></span>
+<span class="r-in"><span><span class="va">rosenbrock</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>result <span class="op">=</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">x</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">100</span> <span class="op">*</span> <span class="op">(</span><span class="va">y</span> <span class="op">-</span> <span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">fzd</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  input_path <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  input_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"[-2;2]"</span>, y <span class="op">=</span> <span class="st">"[-2;2]"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  model <span class="op">=</span> <span class="va">rosenbrock</span>,</span></span>
+<span class="r-in"><span>  output_expression <span class="op">=</span> <span class="st">"result"</span>,</span></span>
+<span class="r-in"><span>  algorithm <span class="op">=</span> <span class="st">"examples/algorithms/bfgs.py"</span>,</span></span>
+<span class="r-in"><span>  calculators <span class="op">=</span> <span class="fl">4L</span>,</span></span>
+<span class="r-in"><span>  algorithm_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>max_iter <span class="op">=</span> <span class="fl">20</span>, tol <span class="op">=</span> <span class="fl">1e-4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -164,7 +220,7 @@ Default <code>NULL</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>

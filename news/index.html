@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.9000</span>
       </span>
     </div>
 
@@ -58,7 +58,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.1" id="fz-11">fz 1.1<a class="anchor" aria-label="anchor" href="#fz-11"></a></h2>
+<h2 class="page-header" data-toc-text="development version" id="fz-development-version">fz (development version)<a class="anchor" aria-label="anchor" href="#fz-development-version"></a></h2>
+<ul><li>
+<code><a href="../reference/fzd.html">fzd()</a></code> now accepts an R function as <code>model</code>, letting adaptive design-of-experiments algorithms drive an R function directly instead of a file-based model (<code>input_path = NULL</code>, <code>output_expression</code> optional, <code>calculators</code> accepted as any single integer but currently always run sequentially, one call at a time — see below). This requires the <code>main</code> branch of <code>fz</code> on GitHub — install it with <code>fz_install(packages = "git+https://github.com/Funz/fz.git")</code>, and needs <a href="https://github.com/Funz/fz/pull/73" class="external-link">Funz/fz#73</a> merged: R closures are bridged in via <code>reticulate</code>, which is only safe to call from the main thread, so <code>fz</code>’s function-model support was changed to always call the model sequentially (like <code>lapply</code>) instead of via a Python thread pool, regardless of <code>calculators</code>.</li>
+<li>
+<code><a href="../reference/fz_install.html">fz_install()</a></code> gains a <code>packages</code> argument (default <code>"funz-fz"</code>) so the latest <code>main</code> branch can be installed instead of the PyPI release.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1" id="fz-11">fz 1.1<small>2026-06-29</small><a class="anchor" aria-label="anchor" href="#fz-11"></a></h2>
 <p>First release, aligned with funz-fz 1.1 on PyPI.</p>
 <div class="section level3">
 <h3 id="core-functions-1-1">Core functions<a class="anchor" aria-label="anchor" href="#core-functions-1-1"></a></h3>
@@ -120,7 +127,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>
