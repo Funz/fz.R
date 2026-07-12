@@ -121,9 +121,8 @@ below) — calls are always run sequentially regardless of its value.</p></dd>
 
 
 <dt id="arg-algorithm-options">algorithm_options<a class="anchor" aria-label="anchor" href="#arg-algorithm-options"></a></dt>
-<dd><p>Algorithm options as a named list or
-semicolon-separated string, e.g. <code>"batch_sample_size=10;seed=42"</code>.
-Default <code>NULL</code>.</p></dd>
+<dd><p>Algorithm options as a named list, a JSON string,
+or a path to a JSON file. Default <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-analysis-dir">analysis_dir<a class="anchor" aria-label="anchor" href="#arg-analysis-dir"></a></dt>
@@ -179,13 +178,41 @@ there is no file-based execution.</p></li>
 <span class="r-in"><span>    output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>z <span class="op">=</span> <span class="st">"grep z output.txt | cut -d= -f2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># A minimal self-contained random-sampling algorithm (see</span></span></span>
+<span class="r-in"><span>  <span class="co"># https://github.com/Funz/fz for ready-made algorithms to install)</span></span></span>
+<span class="r-in"><span>  <span class="va">algo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".py"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"import random"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"class RandomSampler:"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"    def __init__(self, **options):"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        self.batch = int(options.get('batch_sample_size', 5))"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        self.max_iterations = int(options.get('max_iterations', 3))"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        self.iteration = 0"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        self.input_vars = {}"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"    def get_initial_design(self, input_vars, output_vars):"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        self.input_vars = input_vars"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        self.iteration = 1"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        return [{k: random.uniform(*v) for k, v in input_vars.items()}"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"                for _ in range(self.batch)]"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"    def get_next_design(self, previous_input_vars, previous_output_values):"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        self.iteration += 1"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        if self.iteration &gt; self.max_iterations:"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"            return []"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        return [{k: random.uniform(*v) for k, v in self.input_vars.items()}"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"                for _ in range(self.batch)]"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"    def get_analysis(self, input_vars, output_values):"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        valid = [v for v in output_values if v is not None]"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        mean = sum(valid) / len(valid) if valid else None"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"        return {'text': f'mean={mean}', 'data': {'mean': mean}}"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>, <span class="va">algo</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">fzd</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">tf</span>,</span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"[0;1]"</span>, y <span class="op">=</span> <span class="st">"[-5;5]"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="va">model</span>,</span></span>
 <span class="r-in"><span>    output_expression <span class="op">=</span> <span class="st">"z"</span>,</span></span>
-<span class="r-in"><span>    algorithm        <span class="op">=</span> <span class="st">"algorithms/montecarlo_uniform.py"</span>,</span></span>
-<span class="r-in"><span>    algorithm_options <span class="op">=</span> <span class="st">"batch_sample_size=10;max_iterations=3"</span></span></span>
+<span class="r-in"><span>    algorithm        <span class="op">=</span> <span class="va">algo</span>,</span></span>
+<span class="r-in"><span>    algorithm_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>batch_sample_size <span class="op">=</span> <span class="fl">10</span>, max_iterations <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
