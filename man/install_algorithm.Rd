@@ -22,9 +22,9 @@ into the user-level \code{~/.fz/algorithms/} directory (or system-level when
 \code{global = TRUE}).
 }
 \examples{
-\donttest{
-if (fz_available()) {
-  install_algorithm("Funz/Algorithm-MonteCarlo")
-}
+\dontrun{
+# Requires the named GitHub repository to exist and network access;
+# not run automatically since neither is guaranteed in all environments.
+install_algorithm("Funz/Algorithm-MonteCarlo")
 }
 }

@@ -21,9 +21,9 @@ Generic alias: installs a model from a GitHub name, URL, or local zip file.
 Equivalent to \code{\link{install_model}}.
 }
 \examples{
-\donttest{
-if (fz_available()) {
-  install("Funz/Model-PerfectGas")
-}
+\dontrun{
+# Requires the named GitHub repository to exist and network access;
+# not run automatically since neither is guaranteed in all environments.
+install("Funz/Model-PerfectGas")
 }
 }
