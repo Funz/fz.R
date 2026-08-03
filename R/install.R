@@ -68,7 +68,7 @@ fz_available <- function() {
 #' @param global Logical; install system-wide instead of user-level.
 #'   Default \code{FALSE}.
 #'
-#' @return Named list with installation details (path, id, …).
+#' @return Named list with installation details (path, id, ...).
 #' @export
 #'
 #' @examples
@@ -93,7 +93,7 @@ install_model <- function(source, global = FALSE) {
 #' @param global Logical; install system-wide instead of user-level.
 #'   Default \code{FALSE}.
 #'
-#' @return Named list with installation details (path, name, …).
+#' @return Named list with installation details (path, name, ...).
 #' @export
 #'
 #' @examples

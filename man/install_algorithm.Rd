@@ -14,7 +14,7 @@ or path to a local zip file.}
 Default \code{FALSE}.}
 }
 \value{
-Named list with installation details (path, name, …).
+Named list with installation details (path, name, ...).
 }
 \description{
 Installs an algorithm from a GitHub repository name, URL, or local zip file

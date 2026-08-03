@@ -36,8 +36,9 @@ value is used.}
 
 \item{calculators}{Calculator specification(s). Default \code{NULL}. When
 \code{model} is a function, this must be a single integer (default
-\code{1L}), accepted for API compatibility (see "Direct function model"
-below) — calls are always run sequentially regardless of its value.}
+\code{1L}) and is always forced to \code{1L} (see "Direct function
+model" below): R functions are only safe to call from the main thread,
+so a value other than \code{1} triggers a warning and is overridden.}
 
 \item{algorithm_options}{Algorithm options as a named list, a JSON string,
 or a path to a JSON file. Default \code{NULL}.}
@@ -57,30 +58,28 @@ is useful for sensitivity analysis, surrogate-model fitting, or optimization.
 
 Instead of a file-based model, \code{model} can be an R function (this
 requires the \code{main} branch of \code{fz} from GitHub, installed with
-\code{fz_install(packages = "git+https://github.com/Funz/fz.git")} — this
+\code{fz_install(packages = "git+https://github.com/Funz/fz.git")} -- this
 mode is not available in released PyPI versions of \code{funz-fz} yet). In
 this mode:
 \itemize{
-\item \code{input_path} must be \code{NULL} — there are no input files.
+\item \code{input_path} must be \code{NULL} -- there are no input files.
 \item \code{input_variables} names must match the function's arguments.
 \item \code{output_expression} may be \code{NULL}; the value used is then
 the first element of the function's return value (its return value
 directly if scalar, the first element if a vector/list, or the first
 entry's value if a named list).
-\item \code{calculators} must be a single integer, accepted for API
-compatibility but currently without effect: on the \code{fz} side,
-function-model calls always run sequentially, one at a time in the
-calling thread — never through a thread pool. This is required
-because R functions are called back into the R session via
-\code{reticulate}, which is only safe from the main thread; running
-a Python-side thread pool (which always dispatches to a worker thread,
-even with a single worker) would call the function from a thread
-other than the main one and crash the R session. This safety fix
-requires \href{https://github.com/Funz/fz/pull/73}{Funz/fz#73} on the
-\code{fz} \code{main} branch (not yet in a PyPI release as of
-2026-07-12); without it, direct function models crash regardless of
-\code{calculators}. A value other than \code{1} emits a warning
-noting that it has no effect.
+\item \code{calculators} must be a single integer, but is always forced
+to \code{1} here -- regardless of the value passed in -- before being
+forwarded to \code{fz}. On the \code{fz} (Python) side,
+\code{calculators > 1} now evaluates a Python-function model
+concurrently in a worker-thread pool (\href{https://github.com/Funz/fz/pull/73}{Funz/fz#73});
+that is unsafe here because R functions are called back into the R
+session via \code{reticulate}, which is only safe from the main
+thread -- invoking the function from any other thread crashes the R
+session. Passing a value other than \code{1} therefore emits a
+warning explaining that it is being forced back to \code{1}, and the
+call always proceeds with \code{calculators = 1} (strictly
+sequential, one call at a time, in the calling thread).
 \item each iteration's directory (\code{iterNNN/}) only contains a
 \code{values.csv} of that iteration's function inputs/outputs, since
 there is no file-based execution.
@@ -149,7 +148,7 @@ result <- fzd(
   model = rosenbrock,
   output_expression = "result",
   algorithm = "examples/algorithms/bfgs.py",
-  calculators = 4L,
+  calculators = 1L, # forced to 1L anyway for R functions -- see "Direct function model"
   algorithm_options = list(max_iter = 20, tol = 1e-4)
 )
 }
