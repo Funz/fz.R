@@ -14,7 +14,7 @@ path to a local zip file.}
 Default \code{FALSE}.}
 }
 \value{
-Named list with installation details (path, id, …).
+Named list with installation details (path, id, ...).
 }
 \description{
 Installs a model from a GitHub repository name, URL, or local zip file into

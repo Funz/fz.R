@@ -210,24 +210,24 @@ fzl <- function(models = "*", calculators = "*", check = FALSE) {
 #' @section Direct function model:
 #' Instead of a file-based model, \code{model} can be an R function (this
 #' requires the \code{main} branch of \code{fz} from GitHub, installed with
-#' \code{fz_install(packages = "git+https://github.com/Funz/fz.git")} — this
+#' \code{fz_install(packages = "git+https://github.com/Funz/fz.git")} -- this
 #' mode is not available in released PyPI versions of \code{funz-fz} yet). In
 #' this mode:
 #' \itemize{
-#'   \item \code{input_path} must be \code{NULL} — there are no input files.
+#'   \item \code{input_path} must be \code{NULL} -- there are no input files.
 #'   \item \code{input_variables} names must match the function's arguments.
 #'   \item \code{output_expression} may be \code{NULL}; the value used is then
 #'     the first element of the function's return value (its return value
 #'     directly if scalar, the first element if a vector/list, or the first
 #'     entry's value if a named list).
 #'   \item \code{calculators} must be a single integer, but is always forced
-#'     to \code{1} here — regardless of the value passed in — before being
+#'     to \code{1} here -- regardless of the value passed in -- before being
 #'     forwarded to \code{fz}. On the \code{fz} (Python) side,
 #'     \code{calculators > 1} now evaluates a Python-function model
 #'     concurrently in a worker-thread pool (\href{https://github.com/Funz/fz/pull/73}{Funz/fz#73});
 #'     that is unsafe here because R functions are called back into the R
 #'     session via \code{reticulate}, which is only safe from the main
-#'     thread — invoking the function from any other thread crashes the R
+#'     thread -- invoking the function from any other thread crashes the R
 #'     session. Passing a value other than \code{1} therefore emits a
 #'     warning explaining that it is being forced back to \code{1}, and the
 #'     call always proceeds with \code{calculators = 1} (strictly
@@ -325,7 +325,7 @@ fzd <- function(input_path, input_variables, model, output_expression = NULL, al
         "when 'model' is an R function: on the fz (Python) side, calculators > 1 ",
         "now evaluates the model concurrently in a worker-thread pool (see ",
         "https://github.com/Funz/fz#function-models), but R functions bridged in ",
-        "via reticulate are only safe to call from the main thread — calling them ",
+        "via reticulate are only safe to call from the main thread -- calling them ",
         "from any other thread crashes the R session. calculators is therefore ",
         "always reset to 1 here, regardless of the requested value.",
         call. = FALSE

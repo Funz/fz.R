@@ -3,7 +3,7 @@
 .pkg$fz_available <- NULL
 
 .onLoad <- function(libname, pkgname) {
-  # Python is not initialised at load time — deferred to first use via get_fz().
+  # Python is not initialised at load time -- deferred to first use via get_fz().
 }
 
 #' @keywords internal
