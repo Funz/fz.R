@@ -178,6 +178,11 @@ fzo <- function(output_path, model) {
 #' @examples
 #' \donttest{
 #' if (fz_available()) {
+#'   # run inside a throwaway directory: fz writes results/ and .fz/ under cwd
+#'   ex_dir <- file.path(tempdir(), "fz-fzr-example")
+#'   dir.create(ex_dir, showWarnings = FALSE)
+#'   owd <- setwd(ex_dir)
+#'
 #'   tf <- tempfile(fileext = ".sh")
 #'   writeLines(c(
 #'     "#!/bin/sh",
@@ -191,6 +196,9 @@ fzo <- function(output_path, model) {
 #'
 #'   results <- fzr(tf, list(x = c(1L, 2L), y = 3L), model,
 #'                  calculators = "sh://bash input.sh")
+#'
+#'   setwd(owd)
+#'   unlink(ex_dir, recursive = TRUE)
 #' }
 #' }
 fzr <- function(input_path, input_variables, model,
@@ -314,6 +322,11 @@ fzl <- function(models = "*", calculators = "*", check = FALSE) {
 #' @examples
 #' \donttest{
 #' if (fz_available()) {
+#'   # run inside a throwaway directory: fz writes analysis/ and .fz/ under cwd
+#'   ex_dir <- file.path(tempdir(), "fz-fzd-example")
+#'   dir.create(ex_dir, showWarnings = FALSE)
+#'   owd <- setwd(ex_dir)
+#'
 #'   tf <- tempfile(fileext = ".txt")
 #'   writeLines(c("x = ${x~0}", "y = ${y~0}"), tf)
 #'
@@ -358,6 +371,9 @@ fzl <- function(models = "*", calculators = "*", check = FALSE) {
 #'     algorithm        = algo,
 #'     algorithm_options = list(batch_sample_size = 10, max_iterations = 3)
 #'   )
+#'
+#'   setwd(owd)
+#'   unlink(ex_dir, recursive = TRUE)
 #' }
 #' }
 #'

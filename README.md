@@ -195,4 +195,5 @@ Contributions are welcome. Please open a Pull Request or file an issue at
 
 ## License
 
-BSD 3-Clause — see [LICENSE](LICENSE.md).
+BSD 3-Clause. See the
+[LICENSE.md](https://github.com/Funz/fz.R/blob/main/LICENSE.md) file.

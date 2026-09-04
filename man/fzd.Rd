@@ -100,6 +100,11 @@ there is no file-based execution.
 \examples{
 \donttest{
 if (fz_available()) {
+  # run inside a throwaway directory: fz writes analysis/ and .fz/ under cwd
+  ex_dir <- file.path(tempdir(), "fz-fzd-example")
+  dir.create(ex_dir, showWarnings = FALSE)
+  owd <- setwd(ex_dir)
+
   tf <- tempfile(fileext = ".txt")
   writeLines(c("x = ${x~0}", "y = ${y~0}"), tf)
 
@@ -144,6 +149,9 @@ if (fz_available()) {
     algorithm        = algo,
     algorithm_options = list(batch_sample_size = 10, max_iterations = 3)
   )
+
+  setwd(owd)
+  unlink(ex_dir, recursive = TRUE)
 }
 }
 

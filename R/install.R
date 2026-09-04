@@ -39,6 +39,15 @@ fz_install <- function(packages = "funz-fz", method = "auto", conda = "auto", pi
 #'
 #' @return Logical; TRUE if fz is available, FALSE otherwise.
 #'
+#' @details
+#' The importable module name of the \code{funz-fz} package is \code{fz}. This
+#' function returns \code{TRUE} only when a module named \code{fz} imports
+#' \emph{and} exposes the expected API (\code{fzi}/\code{fzc}/\code{fzo}/
+#' \code{fzr}), so that an unrelated Python package that also happens to be
+#' importable as \code{fz} is not mistaken for \code{funz-fz}. All examples
+#' and tests are guarded with \code{if (fz_available())} and therefore skip
+#' (rather than error) when the Python side is missing or misconfigured.
+#'
 #' @export
 #' @importFrom reticulate py_module_available
 #'
@@ -52,7 +61,16 @@ fz_install <- function(packages = "funz-fz", method = "auto", conda = "auto", pi
 #' }
 fz_available <- function() {
   if (is.null(.pkg$fz_available)) {
-    .pkg$fz_available <- reticulate::py_module_available("fz")
+    .pkg$fz_available <- tryCatch({
+      reticulate::py_module_available("fz") &&
+        all(vapply(
+          c("fzi", "fzc", "fzo", "fzr"),
+          function(fn) reticulate::py_has_attr(
+            reticulate::import("fz", delay_load = FALSE), fn
+          ),
+          logical(1)
+        ))
+    }, error = function(e) FALSE)
   }
   .pkg$fz_available
 }

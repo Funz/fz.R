@@ -1,7 +1,12 @@
-# fz 1.2.0
+# fz 1.2.1
 
 Aligned with the `funz-fz` 1.2 release
 ([Funz/fz](https://github.com/Funz/fz/releases/tag/1.2), 2026-09-04).
+
+1.2.0 was rejected by the CRAN incoming pre-tests; 1.2.1 fixes the two
+problems reported there (see "Fixes" below): the `--run-donttest`
+`AttributeError: module 'fz' has no attribute 'fzc'` and the invalid
+`LICENSE.md` file URI in `README.md`.
 
 ## New arguments tracking funz-fz 1.2
 
@@ -62,6 +67,15 @@ Aligned with the `funz-fz` 1.2 release
 
 ## Fixes
 
+* `fz_available()` now returns `TRUE` only when the imported `fz` module
+  actually exposes the `funz-fz` API (`fzi`/`fzc`/`fzo`/`fzr`), instead of
+  merely checking that *some* module named `fz` is importable. On a machine
+  where an unrelated PyPI package is importable as `fz` (as on the CRAN
+  check farm), the `if (fz_available())` guards now skip cleanly rather than
+  letting examples fail with `AttributeError: module 'fz' has no attribute
+  'fzc'`.
+* Fixed an invalid file URI (`LICENSE.md`) in `README.md` flagged by
+  `R CMD check --as-cran`; it now links to the file on GitHub.
 * Fixed `fzd()`'s own `algorithm_options` example/documentation, which used
   a `"key=val;key2=val2"` string that `funz-fz` has never actually accepted
   (only a named list, JSON string, or path to a JSON file) — replaced with

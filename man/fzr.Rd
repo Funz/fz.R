@@ -67,6 +67,11 @@ all outputs into a data frame.
 \examples{
 \donttest{
 if (fz_available()) {
+  # run inside a throwaway directory: fz writes results/ and .fz/ under cwd
+  ex_dir <- file.path(tempdir(), "fz-fzr-example")
+  dir.create(ex_dir, showWarnings = FALSE)
+  owd <- setwd(ex_dir)
+
   tf <- tempfile(fileext = ".sh")
   writeLines(c(
     "#!/bin/sh",
@@ -80,6 +85,9 @@ if (fz_available()) {
 
   results <- fzr(tf, list(x = c(1L, 2L), y = 3L), model,
                  calculators = "sh://bash input.sh")
+
+  setwd(owd)
+  unlink(ex_dir, recursive = TRUE)
 }
 }
 }

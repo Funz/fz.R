@@ -13,6 +13,15 @@ Logical; TRUE if fz is available, FALSE otherwise.
 Checks whether the fz Python package is available in the current
 Python environment.
 }
+\details{
+The importable module name of the \code{funz-fz} package is \code{fz}. This
+function returns \code{TRUE} only when a module named \code{fz} imports
+\emph{and} exposes the expected API (\code{fzi}/\code{fzc}/\code{fzo}/
+\code{fzr}), so that an unrelated Python package that also happens to be
+importable as \code{fz} is not mistaken for \code{funz-fz}. All examples
+and tests are guarded with \code{if (fz_available())} and therefore skip
+(rather than error) when the Python side is missing or misconfigured.
+}
 \examples{
 \donttest{
 if (fz_available()) {
