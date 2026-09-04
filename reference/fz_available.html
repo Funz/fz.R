@@ -18,7 +18,7 @@ Python environment."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -71,6 +71,16 @@ Python environment.</p>
     <div id="value">
     <h2>Value</h2>
     <p>Logical; TRUE if fz is available, FALSE otherwise.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The importable module name of the <code>funz-fz</code> package is <code>fz</code>. This
+function returns <code>TRUE</code> only when a module named <code>fz</code> imports
+<em>and</em> exposes the expected API (<code>fzi</code>/<code>fzc</code>/<code>fzo</code>/
+<code>fzr</code>), so that an unrelated Python package that also happens to be
+importable as <code>fz</code> is not mistaken for <code>funz-fz</code>. All examples
+and tests are guarded with <code>if (fz_available())</code> and therefore skip
+(rather than error) when the Python side is missing or misconfigured.</p>
     </div>
 
     <div id="ref-examples">
