@@ -9,6 +9,16 @@ delimiters, cache key, case directory names, `manifest.json`), and raise the
 Python requirement to 3.9, as `funz-fz` 2.0 no longer supports Python 3.8.
 The major version follows the `funz-fz` version.
 
+A subsequent win-builder pre-test flagged a `donttest` NOTE: the
+`fz_available()` example had a CPU/elapsed time ratio of ~10 (5.6s user CPU
+vs. 0.58s elapsed). This comes from importing `numpy` (a transitive
+dependency of the `funz-fz` Python package pulled in by `reticulate`),
+which spins up one BLAS/OpenMP thread per core on the check machine even
+though the example does no numeric computation. `.onLoad()` now caps
+`OMP_NUM_THREADS`/`OPENBLAS_NUM_THREADS`/`MKL_NUM_THREADS`/
+`NUMEXPR_NUM_THREADS`/`VECLIB_MAXIMUM_THREADS` to 1 (only if not already
+set by the user) before any Python import happens.
+
 ## R CMD check results
 
 <!-- To fill in before submitting: R CMD check --as-cran (R-devel) and
