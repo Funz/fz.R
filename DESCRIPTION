@@ -1,7 +1,7 @@
 Package: fz
 Type: Package
 Title: R Wrapper for the 'funz-fz' Parametric Simulation Framework
-Version: 1.2.1
+Version: 1.2.0
 Authors@R: c(
     person("Yann", "Richet", email = "yann.richet@asnr.fr",
            role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5677-8458"))

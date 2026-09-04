@@ -1,10 +1,10 @@
-# fz 1.2.1
+# fz 1.2.0
 
 Aligned with the `funz-fz` 1.2 release
 ([Funz/fz](https://github.com/Funz/fz/releases/tag/1.2), 2026-09-04).
 
-1.2.0 was rejected by the CRAN incoming pre-tests; 1.2.1 fixes the two
-problems reported there (see "Fixes" below): the `--run-donttest`
+The win-builder incoming pre-tests for this version flagged two problems,
+both fixed here (see "Fixes" below): the `--run-donttest`
 `AttributeError: module 'fz' has no attribute 'fzc'` and the invalid
 `LICENSE.md` file URI in `README.md`.
 

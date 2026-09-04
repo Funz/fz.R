@@ -1,10 +1,9 @@
 ## Submission
 
-This is an update from 1.1 to 1.2.1, aligning the wrapper with the
+This is an update from 1.1 to 1.2.0, aligning the wrapper with the
 `funz-fz` 1.2 Python release.
 
-1.2.0 did not pass the CRAN incoming pre-tests. This version fixes both
-problems reported:
+A win-builder pre-test of this version flagged two problems, both fixed:
 
 1. The invalid `LICENSE.md` file URI in `README.md` (it now points to the
    file on GitHub).
