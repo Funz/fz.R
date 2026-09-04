@@ -9,7 +9,8 @@
 make_capturing_fz_module <- function(captured) {
   list(
     fzd = function(input_path, input_variables, model, output_expression, algorithm,
-                    calculators, algorithm_options, analysis_dir) {
+                    calculators, algorithm_options, analysis_dir,
+                    input_static = NULL) {
       captured$calculators <- calculators
       list(summary = "ok")
     }

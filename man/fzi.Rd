@@ -4,15 +4,22 @@
 \alias{fzi}
 \title{fzi Function}
 \usage{
-fzi(input_path, model)
+fzi(input_path, model, input_static = NULL)
 }
 \arguments{
 \item{input_path}{Path to input file or directory.}
 
 \item{model}{Model definition dict or alias string.}
+
+\item{input_static}{Optional character vector of files that are identical
+across every case (see \code{\link{fzr}}'s \code{input_static}). They are
+never scanned for variables, since they are never templated.
+Default \code{NULL}.}
 }
 \value{
-Named list with variable names and their default values (or NULL).
+Named list keyed by the discovered static objects, variable names,
+and formula expressions, mapped to their values (or \code{NULL} for
+variables with no default).
 }
 \description{
 Parses input file(s) to find variables, formulas, and static objects.

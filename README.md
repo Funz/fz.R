@@ -42,6 +42,8 @@ reticulate::py_install("funz-fz")
 
 The **model** argument is either a string alias (name of an installed model, e.g. `"PerfectGas"`) or an inline named list describing how variables are marked in the template and how outputs are extracted.
 
+Output values can be a shell command (the default) or, with `funz-fz` >= 1.2, one of the shell-free extractors `python://`, `jq://`, `yq://`, `xpath://` (portable on Windows without bash). An output may also resolve to a vector (time series, spectrum, ...).
+
 ## Usage
 
 ### 1 — List installed models
@@ -102,8 +104,11 @@ result <- fzd(
   model,
   output_expression = "pressure",
   algorithm        = "algorithms/montecarlo_uniform.py",
-  algorithm_options = "batch_sample_size=10;max_iterations=5"
+  algorithm_options = list(batch_sample_size = 10, max_iterations = 5)
 )
+
+# `output_expression` may also be a character vector for multi-objective
+# algorithms (e.g. NSGA-II): `c("cost", "-efficiency")`.
 ```
 
 ### 5 — Step-by-step workflow
@@ -118,6 +123,57 @@ fzc("input.txt", list(P = 2.0, V = 11.2), model, output_dir = "compiled")
 # Step 3: read output files after running the simulator externally
 values <- fzo("compiled/P=2,V=11.2", model)
 ```
+
+## A complete runnable example: an external simulator
+
+The snippets above use a placeholder `run.sh`. Here is a self-contained
+parametric study driven by a **real external program** — a tiny Python
+simulator of the ideal gas law `P = n R T / V`. Both files ship with the
+package under `inst/examples/perfectgas/`:
+
+```r
+library(fz)
+# fz_install()  # once, if the funz-fz Python package is not yet installed
+
+ex <- system.file("examples", "perfectgas", package = "fz")
+file.copy(list.files(ex, full.names = TRUE), ".")  # perfectgas.txt + perfectgas.py
+```
+
+`perfectgas.txt` is the input template (`${T~300}` is variable `T`, default `300`):
+
+```
+temperature = ${T~300}     # K
+volume      = ${V~0.001}   # m3
+moles       = ${n~1}       # mol
+```
+
+`perfectgas.py` reads the compiled `perfectgas.txt` in its working directory,
+computes the pressure, and writes `pressure = <value>` to `out.txt`.
+
+```r
+model <- list(
+  varprefix = "$", delim = "{}", formulaprefix = "@", commentline = "#",
+  # shell-free output extraction (funz-fz >= 1.2)
+  output = list(pressure = 'python://grep(r"pressure = (\\S+)", "out.txt")')
+)
+
+results <- fzr(
+  "perfectgas.txt",
+  list(T = c(300, 350, 400), V = 1e-3, n = 1),   # 3 cases
+  model,
+  calculators  = "sh://python3 perfectgas.py",   # the external simulator
+  input_static = "perfectgas.py"                  # shipped into every case dir (funz-fz >= 1.2)
+)
+results[, c("T", "V", "n", "pressure")]
+#>     T     V n pressure
+#> 1 300 0.001 1  2494339
+#> 2 350 0.001 1  2910062
+#> 3 400 0.001 1  3325785
+```
+
+The same model works with `fzd()` for an algorithm-driven study — pass
+`input_variables` as `"[min;max]"` ranges (or a fixed `"1"`) and keep
+`calculators = "sh://python3 perfectgas.py"`, `input_static = "perfectgas.py"`.
 
 ## System requirements
 

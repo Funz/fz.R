@@ -8,14 +8,18 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+# Chunks are eval = FALSE (they need the funz-fz Python package and a
+# configured calculator) and purl = FALSE (so `R CMD check`'s tangle-and-run
+# step does not try to execute them either). The code is still shown in the
+# rendered vignette.
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE  # requires funz-fz Python package and a configured calculator
+  eval = FALSE
 )
 ```
 
-```{r setup}
+```{r setup, purl = FALSE}
 library(fz)
 ```
 
@@ -34,7 +38,7 @@ alias with `fz install`).
 
 ## Installation
 
-```{r install}
+```{r install, purl = FALSE}
 # Install the funz-fz Python package into the active reticulate environment
 fz_install()
 
@@ -65,7 +69,7 @@ The model dict tells fz how to:
 1. find variable placeholders (`varprefix`, `delim`),
 2. extract output values from the result files (`output`).
 
-```{r model_dict}
+```{r model_dict, purl = FALSE}
 model <- list(
   varprefix    = "$",
   delim        = "{}",
@@ -79,8 +83,76 @@ model <- list(
 
 You can also use an installed model alias (a string) instead of an inline dict:
 
-```{r model_alias}
+```{r model_alias, purl = FALSE}
 fzl()$models  # lists installed aliases, e.g. "PerfectGas"
+```
+
+## A complete runnable example (external simulator)
+
+The rest of this vignette uses a placeholder `run.sh`. This section instead
+runs a **real external program**: a tiny Python simulator of the ideal gas
+law `P = n R T / V`. Both files ship with the package under
+`inst/examples/perfectgas/`.
+
+```{r pg_setup, purl = FALSE}
+ex <- system.file("examples", "perfectgas", package = "fz")
+file.copy(list.files(ex, full.names = TRUE), ".")  # perfectgas.txt + perfectgas.py
+```
+
+`perfectgas.txt` is the input template:
+
+```
+temperature = ${T~300}     # K
+volume      = ${V~0.001}   # m3
+moles       = ${n~1}       # mol
+```
+
+`perfectgas.py` reads the compiled `perfectgas.txt` from its working
+directory (fz runs each case in its own directory), computes the pressure,
+and writes `pressure = <value>` to `out.txt`.
+
+```{r pg_model, purl = FALSE}
+model <- list(
+  varprefix = "$", delim = "{}", formulaprefix = "@", commentline = "#",
+  # shell-free output extraction (funz-fz >= 1.2)
+  output = list(pressure = 'python://grep(r"pressure = (\\S+)", "out.txt")')
+)
+
+fzi("perfectgas.txt", model)
+#> $T [1] 300
+#> $V [1] 0.001
+#> $n [1] 1
+```
+
+```{r pg_run, purl = FALSE}
+results <- fzr(
+  "perfectgas.txt",
+  list(T = c(300, 350, 400), V = 1e-3, n = 1),   # 3 cases
+  model,
+  calculators  = "sh://python3 perfectgas.py",   # the external simulator
+  input_static = "perfectgas.py"                  # shipped into every case dir (funz-fz >= 1.2)
+)
+results[, c("T", "V", "n", "pressure")]
+#>     T     V n pressure
+#> 1 300 0.001 1  2494339
+#> 2 350 0.001 1  2910062
+#> 3 400 0.001 1  3325785
+```
+
+The same model drives `fzd()` — keep `calculators` and `input_static`, and
+pass `input_variables` as `"[min;max]"` ranges (a variable held fixed is
+just `"1"`):
+
+```{r pg_fzd, purl = FALSE}
+fzd(
+  "perfectgas.txt",
+  list(T = "[280;320]", V = "[1e-3;2e-3]", n = "1"),
+  model,
+  output_expression = "pressure",
+  algorithm         = "algorithms/montecarlo_uniform.py",
+  calculators  = "sh://python3 perfectgas.py",
+  input_static = "perfectgas.py"
+)
 ```
 
 ## Basic workflow
@@ -92,7 +164,7 @@ The typical fz workflow has four steps.
 `fzi` parses the template and returns the variable names together with their
 default values:
 
-```{r fzi}
+```{r fzi, purl = FALSE}
 vars <- fzi("input.txt", model)
 # $P [1] 1.013
 # $V [1] 22.4
@@ -105,7 +177,7 @@ vars <- fzi("input.txt", model)
 `output_dir`. Each copy goes into a subdirectory named
 `var1=val1,var2=val2,...`:
 
-```{r fzc_single}
+```{r fzc_single, purl = FALSE}
 # Single case
 fzc("input.txt", list(P = 2.0, V = 11.2), model, output_dir = "compiled")
 # writes: compiled/P=2,V=11.2/input.txt  (placeholder replaced with 2.0 / 11.2)
@@ -113,7 +185,7 @@ fzc("input.txt", list(P = 2.0, V = 11.2), model, output_dir = "compiled")
 
 Supply vectors to generate a full-factorial grid:
 
-```{r fzc_grid}
+```{r fzc_grid, purl = FALSE}
 # 2 x 3 = 6 cases
 fzc("input.txt",
     list(P = c(1.0, 2.0), V = c(10.0, 20.0, 30.0)),
@@ -126,7 +198,7 @@ fzc("input.txt",
 `fzr` wraps steps 1–3 and output collection into a single call. It compiles
 the template, runs the calculator for every case, and returns a data frame:
 
-```{r fzr}
+```{r fzr, purl = FALSE}
 results <- fzr(
   "input.txt",
   list(P = c(1.0, 2.0, 3.0), V = 22.4),   # 3 cases (V fixed)
@@ -152,7 +224,7 @@ The `calculators` argument accepts:
 
 If you already ran the simulator externally, `fzo` reads the output files:
 
-```{r fzo}
+```{r fzo, purl = FALSE}
 values <- fzo("results/P=2,V=22.4", model)
 # $pressure [1] "2.026"
 
@@ -166,7 +238,7 @@ all_values <- fzo("results/*", model)
 combinations to evaluate based on previous results. Input variable ranges use
 `"[min;max]"` strings:
 
-```{r fzd}
+```{r fzd, purl = FALSE}
 result <- fzd(
   "input.txt",
   list(P = "[1;5]", V = "[10;30]"),
@@ -184,7 +256,7 @@ surrogate-based optimization, …). You can also write your own.
 
 `fzl` shows which model aliases and calculators are installed in `~/.fz/`:
 
-```{r fzl}
+```{r fzl, purl = FALSE}
 info <- fzl()
 names(info$models)       # e.g. c("PerfectGas", "Moret")
 names(info$calculators)  # e.g. c("sh://")
@@ -205,7 +277,7 @@ fzl(check = TRUE)
 3. **Start small** — run a handful of cases before launching a large sweep.
 4. **Save results** — persist the data frame for reproducibility.
 
-```{r save_results}
+```{r save_results, purl = FALSE}
 saveRDS(results, "fz_results.rds")
 write.csv(results, "fz_results.csv", row.names = FALSE)
 ```
@@ -214,7 +286,7 @@ write.csv(results, "fz_results.csv", row.names = FALSE)
 
 **`fz` Python package not found:**
 
-```{r troubleshoot_install}
+```{r troubleshoot_install, purl = FALSE}
 fz_install()         # install funz-fz into the reticulate environment
 fz_available()       # should return TRUE afterwards
 ```
@@ -234,6 +306,6 @@ using `fzr`.
 
 ## Session info
 
-```{r session_info}
+```{r session_info, purl = FALSE}
 sessionInfo()
 ```

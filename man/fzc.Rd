@@ -4,7 +4,13 @@
 \alias{fzc}
 \title{fzc Function}
 \usage{
-fzc(input_path, input_variables, model, output_dir = "output")
+fzc(
+  input_path,
+  input_variables,
+  model,
+  output_dir = "output",
+  input_static = NULL
+)
 }
 \arguments{
 \item{input_path}{Path to input file or directory.}
@@ -15,6 +21,11 @@ values to generate a full-factorial grid across variables.}
 \item{model}{Model definition dict or alias string.}
 
 \item{output_dir}{Output directory for compiled files. Default \code{"output"}.}
+
+\item{input_static}{Optional character vector of files that are identical
+across every case (see \code{\link{fzr}}'s \code{input_static}). They are
+symlinked into \code{output_dir} rather than templated or duplicated.
+Default \code{NULL}.}
 }
 \value{
 NULL (invisibly). Called for side effects.

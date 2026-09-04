@@ -1,24 +1,71 @@
-# fz (development version)
+# fz 1.2.0
 
-* `fzd()` now accepts an R function as `model`, letting adaptive
-  design-of-experiments algorithms drive an R function directly instead of
-  a file-based model (`input_path = NULL`, `output_expression` optional,
-  `calculators` accepted as any single integer but currently always run
-  sequentially, one call at a time — see below). This requires the `main`
-  branch of `fz` on GitHub — install it with
-  `fz_install(packages = "git+https://github.com/Funz/fz.git")`, and needs
-  [Funz/fz#73](https://github.com/Funz/fz/pull/73) merged: R closures are
-  bridged in via `reticulate`, which is only safe to call from the main
-  thread, so `fz`'s function-model support was changed to always call the
-  model sequentially (like `lapply`) instead of via a Python thread pool,
-  regardless of `calculators`.
-* `fz_install()` gains a `packages` argument (default `"funz-fz"`) so the
-  latest `main` branch can be installed instead of the PyPI release.
+Aligned with the `funz-fz` 1.2 release
+([Funz/fz](https://github.com/Funz/fz/releases/tag/1.2), 2026-09-04).
+
+## New arguments tracking funz-fz 1.2
+
+* `fzr()` gains `case_naming` (`"path"` default, `"hash"`, or `"index"`) to
+  name each case's result/temp subdirectory. `"hash"`/`"index"` sidestep
+  filesystem name-length limits when a study has many variables and write a
+  `cases.csv` manifest at the results root.
+* `fzr()`, `fzc()`, `fzi()` and `fzd()` gain `input_static`: a character
+  vector of files identical across every case (a shared reference dataset, a
+  weather CSV, ...). They are never templated or scanned for variables, never
+  re-hashed per case, and — for relative paths — symlinked into each case
+  directory instead of duplicated (and transferred to `ssh://`/`slurm://`/
+  `funz://` calculators).
+* `fzd()`'s `output_expression` now also accepts a character vector of
+  length > 1 for multi-objective algorithms (e.g. NSGA-II): each case yields
+  one scalar per expression. Vector-valued outputs can be reduced to a scalar
+  objective with `mean()`, `sum()`, `len()`, `median()`, `stdev()`,
+  `variance()`, indexing/slicing, and `zip()`.
+* `fzr()`'s `timeout` default (`NULL`) now documents the funz-fz 1.2
+  resolution order: the model's own `"timeout"` entry, then `FZ_RUN_TIMEOUT`
+  (raised to 1 hour in 1.2). An explicit `timeout` still wins.
+
+## Runnable example
+
+* Added a self-contained external-simulator example under
+  `inst/examples/perfectgas/` (`perfectgas.txt` template + `perfectgas.py`
+  ideal-gas solver). The README and vignette now show a complete `fzr()`
+  parametric run driven by a real external program
+  (`calculators = "sh://python3 perfectgas.py"`,
+  `input_static = "perfectgas.py"`), instead of a placeholder `run.sh`.
+  `tests/testthat/test-perfectgas-example.R` runs it end to end.
+
+## Documented model features from funz-fz 1.2
+
+* `fzo()` documents the shell-free output extraction prefixes: `python://`,
+  `jq://`, `yq://`, `xpath://` (and the explicit `bash://`). These are
+  portable on Windows without a bash install and preserve list results as
+  vectors; a plain shell command still simplifies a single-element result to
+  a scalar.
+* `fzo()`/`fzr()` outputs may now resolve to a vector (time series, spectrum,
+  per-node profile), stored per case unmodified.
+
+## Direct R function models in fzd()
+
+* `fzd()` accepts an R function as `model`, letting adaptive
+  design-of-experiments algorithms drive an R function directly instead of a
+  file-based model (`input_path = NULL`, `output_expression` optional). This
+  is available in `funz-fz` >= 1.2; earlier releases do not support callable
+  models.
+* R closures are bridged in via `reticulate`, which is only safe to call from
+  the main thread, so the wrapper always forces `calculators = 1` (strictly
+  sequential) for function models regardless of the value passed in
+  ([Funz/fz#73](https://github.com/Funz/fz/pull/73)). A value other than `1`
+  emits a warning.
+* `fz_install()` gains a `packages` argument (default `"funz-fz"`) so a
+  development build can be installed from GitHub with
+  `fz_install(packages = "git+https://github.com/Funz/fz.git")`.
+
+## Fixes
+
 * Fixed `fzd()`'s own `algorithm_options` example/documentation, which used
   a `"key=val;key2=val2"` string that `funz-fz` has never actually accepted
   (only a named list, JSON string, or path to a JSON file) — replaced with
-  a named list. CI never caught this because it was silently exercising the
-  wrong Python module (see CI fixes below).
+  a named list.
 * Restored the `LICENSE` file (the templated file R's packaging convention
   requires alongside `License: BSD_3_clause + file LICENSE`), which had been
   mistakenly deleted, and fixed `R-CMD-check` CI to install `funz-fz` and

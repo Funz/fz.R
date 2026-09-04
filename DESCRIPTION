@@ -1,7 +1,7 @@
 Package: fz
 Type: Package
 Title: R Wrapper for the 'funz-fz' Parametric Simulation Framework
-Version: 1.1.9000
+Version: 1.2.0
 Authors@R: c(
     person("Yann", "Richet", email = "yann.richet@asnr.fr",
            role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5677-8458"))
@@ -16,7 +16,6 @@ Description: Provides R bindings to the 'funz-fz' Python package using
 License: BSD_3_clause + file LICENSE
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.3
 SystemRequirements: Python (>= 3.8), funz-fz Python package
 Imports:
     reticulate (>= 1.28)
@@ -34,3 +33,4 @@ VignetteBuilder: knitr
 URL: https://github.com/Funz/fz.R
 BugReports: https://github.com/Funz/fz.R/issues
 Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.0.0

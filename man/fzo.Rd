@@ -13,13 +13,39 @@ directories. Subdirectories within matched directories are not processed.}
 \item{model}{Model definition dict or alias string.}
 }
 \value{
-Named list or data frame of parsed output values.
+Named list or data frame of parsed output values. An output entry
+may resolve to a vector (list) - e.g. a time series or spectrum - which is
+stored per case unmodified (no flattening, padding, or truncation).
 }
 \description{
 Reads and parses output file(s) according to the model's output commands.
 Each matched directory is processed independently; the results are combined
 into a single list or data frame.
 }
+\section{Output extraction methods}{
+
+Each entry of the model's \code{output} list is a string describing how to
+extract that value from the case directory. Besides the default shell
+command (optionally marked \code{"bash://..."}), \code{funz-fz} >= 1.2
+supports shell-free extractors, portable on Windows without a bash install:
+\itemize{
+\item \code{"python://<expr>"} - a Python expression evaluated in the case
+directory with helpers such as \code{grep()}, \code{read()},
+\code{lines()}, \code{json_file()}, \code{csv_file()},
+\code{hdf5_file()} and the \code{re}/\code{json}/\code{math}/
+\code{statistics}/\code{np}/\code{pd} modules.
+\item \code{"jq://<filter> <file>"} - JSON extraction via the \code{jq}
+executable.
+\item \code{"yq://<filter> <file>"} - YAML/JSON/XML/TOML extraction via
+\code{mikefarah/yq}.
+\item \code{"xpath://<expr> <file>"} - XML extraction via
+\code{xmllint --xpath}.
+}
+The \code{python://}, \code{jq://}, \code{yq://} and \code{xpath://} forms
+preserve list results as vectors; a plain shell command simplifies a
+single-element result to a scalar.
+}
+
 \examples{
 \donttest{
 if (fz_available()) {

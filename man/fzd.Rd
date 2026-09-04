@@ -12,7 +12,8 @@ fzd(
   algorithm,
   calculators = NULL,
   algorithm_options = NULL,
-  analysis_dir = "analysis"
+  analysis_dir = "analysis",
+  input_static = NULL
 )
 }
 \arguments{
@@ -26,10 +27,15 @@ fzd(
 "Direct function model" below).}
 
 \item{output_expression}{Expression evaluated on the model outputs to
-produce the scalar quantity the algorithm optimizes or analyses,
-e.g. \code{"result"} or \code{"out1 + 2 * out2"}. May be \code{NULL}
-only when \code{model} is a function, in which case the first output
-value is used.}
+produce the quantity the algorithm optimizes or analyses, e.g.
+\code{"result"} or \code{"out1 + 2 * out2"}. Vector-valued outputs may be
+reduced with \code{mean()}, \code{sum()}, \code{len()}, \code{median()},
+\code{stdev()}, \code{variance()}, indexing/slicing, and \code{zip()}.
+A character vector of length > 1 requests a multi-objective run
+(\code{funz-fz} >= 1.2): each case then yields one scalar per expression,
+passed as-is to multi-objective algorithms such as NSGA-II. May be
+\code{NULL} only when \code{model} is a function, in which case the first
+output value is used.}
 
 \item{algorithm}{Path to the algorithm Python file, e.g.
 \code{"algorithms/montecarlo_uniform.py"}.}
@@ -44,6 +50,11 @@ so a value other than \code{1} triggers a warning and is overridden.}
 or a path to a JSON file. Default \code{NULL}.}
 
 \item{analysis_dir}{Analysis directory. Default \code{"analysis"}.}
+
+\item{input_static}{Optional character vector of files identical across every
+case (see \code{\link{fzr}}'s \code{input_static}); passed through
+unchanged to each iteration's internal \code{fzr()} call. Default
+\code{NULL}.}
 }
 \value{
 Named list with the analysis results produced by the algorithm.
@@ -56,10 +67,10 @@ is useful for sensitivity analysis, surrogate-model fitting, or optimization.
 }
 \section{Direct function model}{
 
-Instead of a file-based model, \code{model} can be an R function (this
-requires the \code{main} branch of \code{fz} from GitHub, installed with
-\code{fz_install(packages = "git+https://github.com/Funz/fz.git")} -- this
-mode is not available in released PyPI versions of \code{funz-fz} yet). In
+Instead of a file-based model, \code{model} can be an R function. This
+requires \code{funz-fz} >= 1.2 (earlier releases do not support callable
+models); a development build can be installed with
+\code{fz_install(packages = "git+https://github.com/Funz/fz.git")}. In
 this mode:
 \itemize{
 \item \code{input_path} must be \code{NULL} -- there are no input files.
@@ -137,7 +148,7 @@ if (fz_available()) {
 }
 
 \dontrun{
-# Direct function model (requires fz main branch from GitHub)
+# Direct function model (requires funz-fz >= 1.2)
 rosenbrock <- function(x, y) {
   list(result = (1 - x)^2 + 100 * (y - x^2)^2)
 }

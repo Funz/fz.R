@@ -11,7 +11,9 @@ fzr(
   results_dir = "results",
   calculators = NULL,
   callbacks = NULL,
-  timeout = NULL
+  timeout = NULL,
+  case_naming = NULL,
+  input_static = NULL
 )
 }
 \arguments{
@@ -31,7 +33,25 @@ for a full-factorial grid), or a data frame where each row is one case.}
 
 \item{callbacks}{Optional named list of callback functions.}
 
-\item{timeout}{Timeout in seconds per case. Default \code{NULL} (no timeout).}
+\item{timeout}{Timeout in seconds per case. Default \code{NULL}, which
+resolves to the model's own \code{"timeout"} entry if set, otherwise the
+\code{FZ_RUN_TIMEOUT} configuration value (1 hour by default in
+\code{funz-fz} >= 1.2). An explicit value here takes precedence over both.}
+
+\item{case_naming}{How each case's result/temp subdirectory is named:
+\code{"path"} (default, \code{"var1=val1,var2=val2,..."}), \code{"hash"}
+(short content hash of the variable combination), or \code{"index"}
+(\code{"case_<i>"}). \code{"hash"}/\code{"index"} avoid filesystem name
+length limits with many variables and write a \code{cases.csv} manifest
+at the results root. Default \code{NULL} (uses \code{FZ_CASE_NAMING} or
+\code{"path"}).}
+
+\item{input_static}{Optional character vector of files identical across
+every case (e.g. a shared reference dataset): never templated, never
+re-hashed per case, and - for relative paths - symlinked into each case
+directory instead of duplicated (and transferred to remote calculators).
+Absolute paths are assumed already present calculator-side. Default
+\code{NULL}.}
 }
 \value{
 Data frame (or named list) with one row per case and columns for

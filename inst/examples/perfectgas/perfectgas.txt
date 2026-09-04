@@ -1,0 +1,6 @@
+# Perfect gas state - input deck for the perfectgas.py simulator.
+# Each value below is a variable fz can substitute; the number after
+# the tilde is the default used when no value is supplied for it.
+temperature = ${T~300}     # K
+volume      = ${V~0.001}   # m3
+moles       = ${n~1}       # mol

@@ -29,27 +29,27 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-code{white-space: pre-wrap;}
-span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
-div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-ul.task-list{list-style: none;}
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 
 <style type="text/css">
-code {
-white-space: pre;
-}
-.sourceCode {
-overflow: visible;
-}
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -63,54 +63,55 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-{ counter-reset: source-line 0; }
+  { counter-reset: source-line 0; }
 pre.numberSource code > span
-{ position: relative; left: -4em; counter-increment: source-line; }
+  { position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-{ content: counter(source-line);
-position: relative; left: -1em; text-align: right; vertical-align: baseline;
-border: none; display: inline-block;
--webkit-touch-callout: none; -webkit-user-select: none;
--khtml-user-select: none; -moz-user-select: none;
--ms-user-select: none; user-select: none;
-padding: 0 4px; width: 4em;
-color: #aaaaaa;
-}
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-{ }
+  {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } 
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.at { color: #7d9029; } 
-code span.bn { color: #40a070; } 
-code span.bu { color: #008000; } 
-code span.cf { color: #007020; font-weight: bold; } 
-code span.ch { color: #4070a0; } 
-code span.cn { color: #880000; } 
-code span.co { color: #60a0b0; font-style: italic; } 
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.do { color: #ba2121; font-style: italic; } 
-code span.dt { color: #902000; } 
-code span.dv { color: #40a070; } 
-code span.er { color: #ff0000; font-weight: bold; } 
-code span.ex { } 
-code span.fl { color: #40a070; } 
-code span.fu { color: #06287e; } 
-code span.im { color: #008000; font-weight: bold; } 
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.kw { color: #007020; font-weight: bold; } 
-code span.op { color: #666666; } 
-code span.ot { color: #007020; } 
-code span.pp { color: #bc7a00; } 
-code span.sc { color: #4070a0; } 
-code span.ss { color: #bb6688; } 
-code span.st { color: #4070a0; } 
-code span.va { color: #19177c; } 
-code span.vs { color: #4070a0; } 
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -340,8 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(fz)</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fz)</span></code></pre></div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>The <code>fz</code> package provides R bindings to the <a href="https://pypi.org/project/funz-fz/">funz-fz</a> Python package. It
@@ -359,12 +359,11 @@ install it as a named alias with <code>fz install</code>).</p>
 </div>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Install the funz-fz Python package into the active reticulate environment</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">fz_install</span>()</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># Verify</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">fz_available</span>()</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the funz-fz Python package into the active reticulate environment</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fz_install</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">fz_available</span>()</span></code></pre></div>
 </div>
 <div id="concepts" class="section level2">
 <h2>Concepts</h2>
@@ -388,21 +387,72 @@ by the <strong>model</strong> dict.</p>
 <li>extract output values from the result files
 (<code>output</code>).</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">varprefix    =</span> <span class="st">&quot;$&quot;</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">delim        =</span> <span class="st">&quot;{}&quot;</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">formulaprefix =</span> <span class="st">&quot;@&quot;</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">commentline  =</span> <span class="st">&quot;#&quot;</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">output =</span> <span class="fu">list</span>(</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">pressure =</span> <span class="st">&quot;grep &#39;pressure =&#39; output.txt | cut -d= -f2&quot;</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  )</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>)</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">varprefix    =</span> <span class="st">&quot;$&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">delim        =</span> <span class="st">&quot;{}&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">formulaprefix =</span> <span class="st">&quot;@&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">commentline  =</span> <span class="st">&quot;#&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="fu">list</span>(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pressure =</span> <span class="st">&quot;grep &#39;pressure =&#39; output.txt | cut -d= -f2&quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>You can also use an installed model alias (a string) instead of an
 inline dict:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">fzl</span>()<span class="sc">$</span>models  <span class="co"># lists installed aliases, e.g. &quot;PerfectGas&quot;</span></span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fzl</span>()<span class="sc">$</span>models  <span class="co"># lists installed aliases, e.g. &quot;PerfectGas&quot;</span></span></code></pre></div>
 </div>
+</div>
+<div id="a-complete-runnable-example-external-simulator" class="section level2">
+<h2>A complete runnable example (external simulator)</h2>
+<p>The rest of this vignette uses a placeholder <code>run.sh</code>.
+This section instead runs a <strong>real external program</strong>: a
+tiny Python simulator of the ideal gas law <code>P = n R T / V</code>.
+Both files ship with the package under
+<code>inst/examples/perfectgas/</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ex <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;perfectgas&quot;</span>, <span class="at">package =</span> <span class="st">&quot;fz&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">file.copy</span>(<span class="fu">list.files</span>(ex, <span class="at">full.names =</span> <span class="cn">TRUE</span>), <span class="st">&quot;.&quot;</span>)  <span class="co"># perfectgas.txt + perfectgas.py</span></span></code></pre></div>
+<p><code>perfectgas.txt</code> is the input template:</p>
+<pre><code>temperature = ${T~300}     # K
+volume      = ${V~0.001}   # m3
+moles       = ${n~1}       # mol</code></pre>
+<p><code>perfectgas.py</code> reads the compiled
+<code>perfectgas.txt</code> from its working directory (fz runs each
+case in its own directory), computes the pressure, and writes
+<code>pressure = &lt;value&gt;</code> to <code>out.txt</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">varprefix =</span> <span class="st">&quot;$&quot;</span>, <span class="at">delim =</span> <span class="st">&quot;{}&quot;</span>, <span class="at">formulaprefix =</span> <span class="st">&quot;@&quot;</span>, <span class="at">commentline =</span> <span class="st">&quot;#&quot;</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># shell-free output extraction (funz-fz &gt;= 1.2)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="fu">list</span>(<span class="at">pressure =</span> <span class="st">&#39;python://grep(r&quot;pressure = (</span><span class="sc">\\</span><span class="st">S+)&quot;, &quot;out.txt&quot;)&#39;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">fzi</span>(<span class="st">&quot;perfectgas.txt&quot;</span>, model)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $T [1] 300</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $V [1] 0.001</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $n [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">fzr</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;perfectgas.txt&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">T =</span> <span class="fu">c</span>(<span class="dv">300</span>, <span class="dv">350</span>, <span class="dv">400</span>), <span class="at">V =</span> <span class="fl">1e-3</span>, <span class="at">n =</span> <span class="dv">1</span>),   <span class="co"># 3 cases</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  model,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">calculators  =</span> <span class="st">&quot;sh://python3 perfectgas.py&quot;</span>,   <span class="co"># the external simulator</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">input_static =</span> <span class="st">&quot;perfectgas.py&quot;</span>                  <span class="co"># shipped into every case dir (funz-fz &gt;= 1.2)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>results[, <span class="fu">c</span>(<span class="st">&quot;T&quot;</span>, <span class="st">&quot;V&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;pressure&quot;</span>)]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     T     V n pressure</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 300 0.001 1  2494339</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 350 0.001 1  2910062</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 400 0.001 1  3325785</span></span></code></pre></div>
+<p>The same model drives <code>fzd()</code> — keep
+<code>calculators</code> and <code>input_static</code>, and pass
+<code>input_variables</code> as <code>&quot;[min;max]&quot;</code> ranges (a
+variable held fixed is just <code>&quot;1&quot;</code>):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fzd</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;perfectgas.txt&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">T =</span> <span class="st">&quot;[280;320]&quot;</span>, <span class="at">V =</span> <span class="st">&quot;[1e-3;2e-3]&quot;</span>, <span class="at">n =</span> <span class="st">&quot;1&quot;</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  model,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_expression =</span> <span class="st">&quot;pressure&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">algorithm         =</span> <span class="st">&quot;algorithms/montecarlo_uniform.py&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">calculators  =</span> <span class="st">&quot;sh://python3 perfectgas.py&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">input_static =</span> <span class="st">&quot;perfectgas.py&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div id="basic-workflow" class="section level2">
 <h2>Basic workflow</h2>
@@ -411,48 +461,44 @@ inline dict:</p>
 <h3>Step 1 — Inspect the template</h3>
 <p><code>fzi</code> parses the template and returns the variable names
 together with their default values:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">fzi</span>(<span class="st">&quot;input.txt&quot;</span>, model)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co"># $P [1] 1.013</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co"># $V [1] 22.4</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co"># $n [1] 1.0</span></span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">fzi</span>(<span class="st">&quot;input.txt&quot;</span>, model)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># $P [1] 1.013</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># $V [1] 22.4</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># $n [1] 1.0</span></span></code></pre></div>
 </div>
 <div id="step-2-compile-substitute-values" class="section level3">
 <h3>Step 2 — Compile (substitute values)</h3>
 <p><code>fzc</code> writes one copy of the input file per parameter
 combination into <code>output_dir</code>. Each copy goes into a
 subdirectory named <code>var1=val1,var2=val2,...</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Single case</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">fzc</span>(<span class="st">&quot;input.txt&quot;</span>, <span class="fu">list</span>(<span class="at">P =</span> <span class="fl">2.0</span>, <span class="at">V =</span> <span class="fl">11.2</span>), model, <span class="at">output_dir =</span> <span class="st">&quot;compiled&quot;</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co"># writes: compiled/P=2,V=11.2/input.txt  (placeholder replaced with 2.0 / 11.2)</span></span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Single case</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fzc</span>(<span class="st">&quot;input.txt&quot;</span>, <span class="fu">list</span>(<span class="at">P =</span> <span class="fl">2.0</span>, <span class="at">V =</span> <span class="fl">11.2</span>), model, <span class="at">output_dir =</span> <span class="st">&quot;compiled&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># writes: compiled/P=2,V=11.2/input.txt  (placeholder replaced with 2.0 / 11.2)</span></span></code></pre></div>
 <p>Supply vectors to generate a full-factorial grid:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># 2 x 3 = 6 cases</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">fzc</span>(<span class="st">&quot;input.txt&quot;</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">P =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>), <span class="at">V =</span> <span class="fu">c</span>(<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>)),</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    model,</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>    <span class="at">output_dir =</span> <span class="st">&quot;compiled&quot;</span>)</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2 x 3 = 6 cases</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fzc</span>(<span class="st">&quot;input.txt&quot;</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">P =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>), <span class="at">V =</span> <span class="fu">c</span>(<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>)),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    model,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_dir =</span> <span class="st">&quot;compiled&quot;</span>)</span></code></pre></div>
 </div>
 <div id="step-3-run-the-model-and-collect-outputs" class="section level3">
 <h3>Step 3 — Run the model and collect outputs</h3>
 <p><code>fzr</code> wraps steps 1–3 and output collection into a single
 call. It compiles the template, runs the calculator for every case, and
 returns a data frame:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">fzr</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="st">&quot;input.txt&quot;</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">P =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>), <span class="at">V =</span> <span class="fl">22.4</span>),   <span class="co"># 3 cases (V fixed)</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  model,</span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">results_dir =</span> <span class="st">&quot;results&quot;</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="at">calculators =</span> <span class="st">&quot;sh://bash run.sh&quot;</span>           <span class="co"># run.sh executes the simulator</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>)</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co"># results is a data frame:</span></span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#     P    V  pressure</span></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co"># 1  1.0  22.4   ...</span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co"># 2  2.0  22.4   ...</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co"># 3  3.0  22.4   ...</span></span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">fzr</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;input.txt&quot;</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">P =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>), <span class="at">V =</span> <span class="fl">22.4</span>),   <span class="co"># 3 cases (V fixed)</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  model,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">results_dir =</span> <span class="st">&quot;results&quot;</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">calculators =</span> <span class="st">&quot;sh://bash run.sh&quot;</span>           <span class="co"># run.sh executes the simulator</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># results is a data frame:</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     P    V  pressure</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 1  1.0  22.4   ...</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2  2.0  22.4   ...</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3  3.0  22.4   ...</span></span></code></pre></div>
 <p>The <code>calculators</code> argument accepts:</p>
 <ul>
 <li><code>&quot;sh://bash run.sh&quot;</code> — run a local shell command</li>
@@ -465,12 +511,11 @@ script</li>
 <h3>Step 4 — Read outputs from existing directories</h3>
 <p>If you already ran the simulator externally, <code>fzo</code> reads
 the output files:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>values <span class="ot">&lt;-</span> <span class="fu">fzo</span>(<span class="st">&quot;results/P=2,V=22.4&quot;</span>, model)</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co"># $pressure [1] &quot;2.026&quot;</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Glob to read all cases at once:</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>all_values <span class="ot">&lt;-</span> <span class="fu">fzo</span>(<span class="st">&quot;results/*&quot;</span>, model)</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> <span class="fu">fzo</span>(<span class="st">&quot;results/P=2,V=22.4&quot;</span>, model)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># $pressure [1] &quot;2.026&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Glob to read all cases at once:</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>all_values <span class="ot">&lt;-</span> <span class="fu">fzo</span>(<span class="st">&quot;results/*&quot;</span>, model)</span></code></pre></div>
 </div>
 </div>
 <div id="algorithm-driven-design-of-experiments" class="section level2">
@@ -478,15 +523,14 @@ the output files:</p>
 <p><code>fzd</code> runs an adaptive experiment: the algorithm decides
 which parameter combinations to evaluate based on previous results.
 Input variable ranges use <code>&quot;[min;max]&quot;</code> strings:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fzd</span>(</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="st">&quot;input.txt&quot;</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">P =</span> <span class="st">&quot;[1;5]&quot;</span>, <span class="at">V =</span> <span class="st">&quot;[10;30]&quot;</span>),</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  model,</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">output_expression =</span> <span class="st">&quot;pressure&quot;</span>,</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="at">algorithm         =</span> <span class="st">&quot;algorithms/montecarlo_uniform.py&quot;</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="at">algorithm_options =</span> <span class="fu">list</span>(<span class="at">batch_sample_size =</span> <span class="dv">10</span>, <span class="at">max_iterations =</span> <span class="dv">5</span>, <span class="at">seed =</span> <span class="dv">42</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>)</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fzd</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;input.txt&quot;</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">P =</span> <span class="st">&quot;[1;5]&quot;</span>, <span class="at">V =</span> <span class="st">&quot;[10;30]&quot;</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  model,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_expression =</span> <span class="st">&quot;pressure&quot;</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">algorithm         =</span> <span class="st">&quot;algorithms/montecarlo_uniform.py&quot;</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">algorithm_options =</span> <span class="fu">list</span>(<span class="at">batch_sample_size =</span> <span class="dv">10</span>, <span class="at">max_iterations =</span> <span class="dv">5</span>, <span class="at">seed =</span> <span class="dv">42</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Algorithms are Python files; <code>fz</code> ships several in
 <code>algorithms/</code> (Monte Carlo, surrogate-based optimization, …).
 You can also write your own.</p>
@@ -495,16 +539,15 @@ You can also write your own.</p>
 <h2>Listing installed models</h2>
 <p><code>fzl</code> shows which model aliases and calculators are
 installed in <code>~/.fz/</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>info <span class="ot">&lt;-</span> <span class="fu">fzl</span>()</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">names</span>(info<span class="sc">$</span>models)       <span class="co"># e.g. c(&quot;PerfectGas&quot;, &quot;Moret&quot;)</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">names</span>(info<span class="sc">$</span>calculators)  <span class="co"># e.g. c(&quot;sh://&quot;)</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co"># Filter by pattern</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="fu">fzl</span>(<span class="at">models =</span> <span class="st">&quot;Perfect*&quot;</span>)</span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co"># Probe calculators to verify they are reachable</span></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="fu">fzl</span>(<span class="at">check =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>info <span class="ot">&lt;-</span> <span class="fu">fzl</span>()</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(info<span class="sc">$</span>models)       <span class="co"># e.g. c(&quot;PerfectGas&quot;, &quot;Moret&quot;)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(info<span class="sc">$</span>calculators)  <span class="co"># e.g. c(&quot;sh://&quot;)</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter by pattern</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fzl</span>(<span class="at">models =</span> <span class="st">&quot;Perfect*&quot;</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Probe calculators to verify they are reachable</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fzl</span>(<span class="at">check =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="best-practices" class="section level2">
 <h2>Best practices</h2>
@@ -518,16 +561,14 @@ launching a large sweep.</li>
 <li><strong>Save results</strong> — persist the data frame for
 reproducibility.</li>
 </ol>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">saveRDS</span>(results, <span class="st">&quot;fz_results.rds&quot;</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">write.csv</span>(results, <span class="st">&quot;fz_results.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(results, <span class="st">&quot;fz_results.rds&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(results, <span class="st">&quot;fz_results.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 </div>
 <div id="troubleshooting" class="section level2">
 <h2>Troubleshooting</h2>
 <p><strong><code>fz</code> Python package not found:</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">fz_install</span>()         <span class="co"># install funz-fz into the reticulate environment</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">fz_available</span>()       <span class="co"># should return TRUE afterwards</span></span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fz_install</span>()         <span class="co"># install funz-fz into the reticulate environment</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fz_available</span>()       <span class="co"># should return TRUE afterwards</span></span></code></pre></div>
 <p><strong>Variables not found in template:</strong> Check that
 <code>varprefix</code> and <code>delim</code> in your model dict match
 the syntax used in your template file. Run <code>fzi</code> and inspect
@@ -545,8 +586,7 @@ compiled directory to confirm it works before using
 </div>
 <div id="session-info" class="section level2">
 <h2>Session info</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
-<p>/home/richet/Sync/Open/Funz/github/fz.R/vignettes/modelica-examples.R</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 </div>
 
 
