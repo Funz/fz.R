@@ -19,7 +19,7 @@ output_dir, named var1=val1,var2=val2,...."><!-- mathjax --><script src="https:/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -67,7 +67,13 @@ Each unique combination of values is written to its own subdirectory inside
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fzc</span><span class="op">(</span><span class="va">input_path</span>, <span class="va">input_variables</span>, <span class="va">model</span>, output_dir <span class="op">=</span> <span class="st">"output"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fzc</span><span class="op">(</span></span>
+<span>  <span class="va">input_path</span>,</span>
+<span>  <span class="va">input_variables</span>,</span>
+<span>  <span class="va">model</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="st">"output"</span>,</span>
+<span>  input_static <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -89,6 +95,13 @@ values to generate a full-factorial grid across variables.</p></dd>
 
 <dt id="arg-output-dir">output_dir<a class="anchor" aria-label="anchor" href="#arg-output-dir"></a></dt>
 <dd><p>Output directory for compiled files. Default <code>"output"</code>.</p></dd>
+
+
+<dt id="arg-input-static">input_static<a class="anchor" aria-label="anchor" href="#arg-input-static"></a></dt>
+<dd><p>Optional character vector of files that are identical
+across every case (see <code><a href="fzr.html">fzr</a></code>'s <code>input_static</code>). They are
+symlinked into <code>output_dir</code> rather than templated or duplicated.
+Default <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div id="value">

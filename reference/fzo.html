@@ -19,7 +19,7 @@ into a single list or data frame."><!-- mathjax --><script src="https://cdnjs.cl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -85,7 +85,31 @@ directories. Subdirectories within matched directories are not processed.</p></d
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Named list or data frame of parsed output values.</p>
+    <p>Named list or data frame of parsed output values. An output entry
+may resolve to a vector (list) - e.g. a time series or spectrum - which is
+stored per case unmodified (no flattening, padding, or truncation).</p>
+    </div>
+    <div id="output-extraction-methods">
+    <h2>Output extraction methods</h2>
+
+
+<p>Each entry of the model's <code>output</code> list is a string describing how to
+extract that value from the case directory. Besides the default shell
+command (optionally marked <code>"bash://..."</code>), <code>funz-fz</code> &gt;= 1.2
+supports shell-free extractors, portable on Windows without a bash install:</p><ul><li><p><code>"python://&lt;expr&gt;"</code> - a Python expression evaluated in the case
+directory with helpers such as <code><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep()</a></code>, <code>read()</code>,
+<code><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines()</a></code>, <code>json_file()</code>, <code>csv_file()</code>,
+<code>hdf5_file()</code> and the <code>re</code>/<code>json</code>/<code>math</code>/
+<code>statistics</code>/<code>np</code>/<code>pd</code> modules.</p></li>
+<li><p><code>"jq://&lt;filter&gt; &lt;file&gt;"</code> - JSON extraction via the <code>jq</code>
+executable.</p></li>
+<li><p><code>"yq://&lt;filter&gt; &lt;file&gt;"</code> - YAML/JSON/XML/TOML extraction via
+<code>mikefarah/yq</code>.</p></li>
+<li><p><code>"xpath://&lt;expr&gt; &lt;file&gt;"</code> - XML extraction via
+<code>xmllint --xpath</code>.</p></li>
+</ul><p>The <code>python://</code>, <code>jq://</code>, <code>yq://</code> and <code>xpath://</code> forms
+preserve list results as vectors; a plain shell command simplifies a
+single-element result to a scalar.</p>
     </div>
 
     <div id="ref-examples">

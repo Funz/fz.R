@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -157,6 +157,64 @@ inline dict:</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="a-complete-runnable-example-external-simulator">A complete runnable example (external simulator)<a class="anchor" aria-label="anchor" href="#a-complete-runnable-example-external-simulator"></a>
+</h2>
+<p>The rest of this vignette uses a placeholder <code>run.sh</code>.
+This section instead runs a <strong>real external program</strong>: a
+tiny Python simulator of the ideal gas law <code>P = n R T / V</code>.
+Both files ship with the package under
+<code>inst/examples/perfectgas/</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, <span class="st">"perfectgas"</span>, package <span class="op">=</span> <span class="st">"fz"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">ex</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="st">"."</span><span class="op">)</span>  <span class="co"># perfectgas.txt + perfectgas.py</span></span></code></pre></div>
+<p><code>perfectgas.txt</code> is the input template:</p>
+<pre><code>temperature = ${T~300}     # K
+volume      = ${V~0.001}   # m3
+moles       = ${n~1}       # mol</code></pre>
+<p><code>perfectgas.py</code> reads the compiled
+<code>perfectgas.txt</code> from its working directory (fz runs each
+case in its own directory), computes the pressure, and writes
+<code>pressure = &lt;value&gt;</code> to <code>out.txt</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  varprefix <span class="op">=</span> <span class="st">"$"</span>, delim <span class="op">=</span> <span class="st">"{}"</span>, formulaprefix <span class="op">=</span> <span class="st">"@"</span>, commentline <span class="op">=</span> <span class="st">"#"</span>,</span>
+<span>  <span class="co"># shell-free output extraction (funz-fz &gt;= 1.2)</span></span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>pressure <span class="op">=</span> <span class="st">'python://grep(r"pressure = (\\S+)", "out.txt")'</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/fzi.html">fzi</a></span><span class="op">(</span><span class="st">"perfectgas.txt"</span>, <span class="va">model</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $T [1] 300</span></span>
+<span><span class="co">#&gt; $V [1] 0.001</span></span>
+<span><span class="co">#&gt; $n [1] 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fzr.html">fzr</a></span><span class="op">(</span></span>
+<span>  <span class="st">"perfectgas.txt"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>T <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>, <span class="fl">350</span>, <span class="fl">400</span><span class="op">)</span>, V <span class="op">=</span> <span class="fl">1e-3</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,   <span class="co"># 3 cases</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  calculators  <span class="op">=</span> <span class="st">"sh://python3 perfectgas.py"</span>,   <span class="co"># the external simulator</span></span>
+<span>  input_static <span class="op">=</span> <span class="st">"perfectgas.py"</span>                  <span class="co"># shipped into every case dir (funz-fz &gt;= 1.2)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">results</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"T"</span>, <span class="st">"V"</span>, <span class="st">"n"</span>, <span class="st">"pressure"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;     T     V n pressure</span></span>
+<span><span class="co">#&gt; 1 300 0.001 1  2494339</span></span>
+<span><span class="co">#&gt; 2 350 0.001 1  2910062</span></span>
+<span><span class="co">#&gt; 3 400 0.001 1  3325785</span></span></code></pre></div>
+<p>The same model drives <code><a href="../reference/fzd.html">fzd()</a></code> — keep
+<code>calculators</code> and <code>input_static</code>, and pass
+<code>input_variables</code> as <code>"[min;max]"</code> ranges (a
+variable held fixed is just <code>"1"</code>):</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fzd.html">fzd</a></span><span class="op">(</span></span>
+<span>  <span class="st">"perfectgas.txt"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>T <span class="op">=</span> <span class="st">"[280;320]"</span>, V <span class="op">=</span> <span class="st">"[1e-3;2e-3]"</span>, n <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span>,</span>
+<span>  <span class="va">model</span>,</span>
+<span>  output_expression <span class="op">=</span> <span class="st">"pressure"</span>,</span>
+<span>  algorithm         <span class="op">=</span> <span class="st">"algorithms/montecarlo_uniform.py"</span>,</span>
+<span>  calculators  <span class="op">=</span> <span class="st">"sh://python3 perfectgas.py"</span>,</span>
+<span>  input_static <span class="op">=</span> <span class="st">"perfectgas.py"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="basic-workflow">Basic workflow<a class="anchor" aria-label="anchor" href="#basic-workflow"></a>
 </h2>
 <p>The typical fz workflow has four steps.</p>
@@ -165,7 +223,7 @@ inline dict:</p>
 </h3>
 <p><code>fzi</code> parses the template and returns the variable names
 together with their default values:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fzi.html">fzi</a></span><span class="op">(</span><span class="st">"input.txt"</span>, <span class="va">model</span><span class="op">)</span></span>
 <span><span class="co"># $P [1] 1.013</span></span>
 <span><span class="co"># $V [1] 22.4</span></span>
@@ -177,12 +235,12 @@ together with their default values:</p>
 <p><code>fzc</code> writes one copy of the input file per parameter
 combination into <code>output_dir</code>. Each copy goes into a
 subdirectory named <code>var1=val1,var2=val2,...</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Single case</span></span>
 <span><span class="fu"><a href="../reference/fzc.html">fzc</a></span><span class="op">(</span><span class="st">"input.txt"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>P <span class="op">=</span> <span class="fl">2.0</span>, V <span class="op">=</span> <span class="fl">11.2</span><span class="op">)</span>, <span class="va">model</span>, output_dir <span class="op">=</span> <span class="st">"compiled"</span><span class="op">)</span></span>
 <span><span class="co"># writes: compiled/P=2,V=11.2/input.txt  (placeholder replaced with 2.0 / 11.2)</span></span></code></pre></div>
 <p>Supply vectors to generate a full-factorial grid:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 2 x 3 = 6 cases</span></span>
 <span><span class="fu"><a href="../reference/fzc.html">fzc</a></span><span class="op">(</span><span class="st">"input.txt"</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>P <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.0</span>, <span class="fl">2.0</span><span class="op">)</span>, V <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -195,7 +253,7 @@ subdirectory named <code>var1=val1,var2=val2,...</code>:</p>
 <p><code>fzr</code> wraps steps 1–3 and output collection into a single
 call. It compiles the template, runs the calculator for every case, and
 returns a data frame:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fzr.html">fzr</a></span><span class="op">(</span></span>
 <span>  <span class="st">"input.txt"</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>P <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span><span class="op">)</span>, V <span class="op">=</span> <span class="fl">22.4</span><span class="op">)</span>,   <span class="co"># 3 cases (V fixed)</span></span>
@@ -225,7 +283,7 @@ script</li>
 </h3>
 <p>If you already ran the simulator externally, <code>fzo</code> reads
 the output files:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">values</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fzo.html">fzo</a></span><span class="op">(</span><span class="st">"results/P=2,V=22.4"</span>, <span class="va">model</span><span class="op">)</span></span>
 <span><span class="co"># $pressure [1] "2.026"</span></span>
 <span></span>
@@ -239,7 +297,7 @@ the output files:</p>
 <p><code>fzd</code> runs an adaptive experiment: the algorithm decides
 which parameter combinations to evaluate based on previous results.
 Input variable ranges use <code>"[min;max]"</code> strings:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fzd.html">fzd</a></span><span class="op">(</span></span>
 <span>  <span class="st">"input.txt"</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>P <span class="op">=</span> <span class="st">"[1;5]"</span>, V <span class="op">=</span> <span class="st">"[10;30]"</span><span class="op">)</span>,</span>
@@ -257,7 +315,7 @@ You can also write your own.</p>
 </h2>
 <p><code>fzl</code> shows which model aliases and calculators are
 installed in <code>~/.fz/</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fzl.html">fzl</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">info</span><span class="op">$</span><span class="va">models</span><span class="op">)</span>       <span class="co"># e.g. c("PerfectGas", "Moret")</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">info</span><span class="op">$</span><span class="va">calculators</span><span class="op">)</span>  <span class="co"># e.g. c("sh://")</span></span>
@@ -285,7 +343,7 @@ launching a large sweep.</li>
 <strong>Save results</strong> — persist the data frame for
 reproducibility.</li>
 </ol>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">results</span>, <span class="st">"fz_results.rds"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">results</span>, <span class="st">"fz_results.csv"</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -293,7 +351,7 @@ reproducibility.</li>
 <h2 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
 </h2>
 <p><strong><code>fz</code> Python package not found:</strong></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fz_install.html">fz_install</a></span><span class="op">(</span><span class="op">)</span>         <span class="co"># install funz-fz into the reticulate environment</span></span>
 <span><span class="fu"><a href="../reference/fz_available.html">fz_available</a></span><span class="op">(</span><span class="op">)</span>       <span class="co"># should return TRUE afterwards</span></span></code></pre></div>
 <p><strong>Variables not found in template:</strong> Check that
@@ -317,7 +375,7 @@ compiled directory to confirm it works before using
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </div>

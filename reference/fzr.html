@@ -21,7 +21,7 @@ all outputs into a data frame."><!-- mathjax --><script src="https://cdnjs.cloud
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -78,7 +78,9 @@ all outputs into a data frame.</p>
 <span>  results_dir <span class="op">=</span> <span class="st">"results"</span>,</span>
 <span>  calculators <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  callbacks <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  timeout <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  timeout <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  case_naming <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  input_static <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -115,7 +117,29 @@ for a full-factorial grid), or a data frame where each row is one case.</p></dd>
 
 
 <dt id="arg-timeout">timeout<a class="anchor" aria-label="anchor" href="#arg-timeout"></a></dt>
-<dd><p>Timeout in seconds per case. Default <code>NULL</code> (no timeout).</p></dd>
+<dd><p>Timeout in seconds per case. Default <code>NULL</code>, which
+resolves to the model's own <code>"timeout"</code> entry if set, otherwise the
+<code>FZ_RUN_TIMEOUT</code> configuration value (1 hour by default in
+<code>funz-fz</code> &gt;= 1.2). An explicit value here takes precedence over both.</p></dd>
+
+
+<dt id="arg-case-naming">case_naming<a class="anchor" aria-label="anchor" href="#arg-case-naming"></a></dt>
+<dd><p>How each case's result/temp subdirectory is named:
+<code>"path"</code> (default, <code>"var1=val1,var2=val2,..."</code>), <code>"hash"</code>
+(short content hash of the variable combination), or <code>"index"</code>
+(<code>"case_&lt;i&gt;"</code>). <code>"hash"</code>/<code>"index"</code> avoid filesystem name
+length limits with many variables and write a <code>cases.csv</code> manifest
+at the results root. Default <code>NULL</code> (uses <code>FZ_CASE_NAMING</code> or
+<code>"path"</code>).</p></dd>
+
+
+<dt id="arg-input-static">input_static<a class="anchor" aria-label="anchor" href="#arg-input-static"></a></dt>
+<dd><p>Optional character vector of files identical across
+every case (e.g. a shared reference dataset): never templated, never
+re-hashed per case, and - for relative paths - symlinked into each case
+directory instead of duplicated (and transferred to remote calculators).
+Absolute paths are assumed already present calculator-side. Default
+<code>NULL</code>.</p></dd>
 
 </dl></div>
     <div id="value">

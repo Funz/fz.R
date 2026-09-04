@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -63,7 +63,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fzi</span><span class="op">(</span><span class="va">input_path</span>, <span class="va">model</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fzi</span><span class="op">(</span><span class="va">input_path</span>, <span class="va">model</span>, input_static <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,10 +77,19 @@
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>Model definition dict or alias string.</p></dd>
 
+
+<dt id="arg-input-static">input_static<a class="anchor" aria-label="anchor" href="#arg-input-static"></a></dt>
+<dd><p>Optional character vector of files that are identical
+across every case (see <code><a href="fzr.html">fzr</a></code>'s <code>input_static</code>). They are
+never scanned for variables, since they are never templated.
+Default <code>NULL</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Named list with variable names and their default values (or NULL).</p>
+    <p>Named list keyed by the discovered static objects, variable names,
+and formula expressions, mapped to their values (or <code>NULL</code> for
+variables with no default).</p>
     </div>
 
     <div id="ref-examples">
