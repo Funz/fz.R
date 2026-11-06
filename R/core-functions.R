@@ -155,8 +155,12 @@ fzo <- function(output_path, model) {
 #' @param callbacks Optional named list of callback functions.
 #' @param timeout Timeout in seconds per case. Default \code{NULL}, which
 #'   resolves to the model's own \code{"timeout"} entry if set, otherwise the
-#'   \code{FZ_RUN_TIMEOUT} configuration value (1 hour by default in
-#'   \code{funz-fz} >= 1.2). An explicit value here takes precedence over both.
+#'   \code{FZ_RUN_TIMEOUT} configuration value (1 hour by default for
+#'   \code{sh://} and \code{funz://}; since \code{funz-fz} 2.0, no timeout for
+#'   \code{ssh://} and \code{slurm://} unless \code{FZ_RUN_TIMEOUT} is set). An explicit value here takes
+#'   precedence over both. \code{0} means "no timeout" (\code{funz-fz} >= 2.0;
+#'   earlier releases timed every case out immediately); a negative value is
+#'   an error.
 #' @param case_naming How each case's result/temp subdirectory is named:
 #'   \code{"path"} (default, \code{"var1=val1,var2=val2,..."}), \code{"hash"}
 #'   (short content hash of the variable combination), or \code{"index"}

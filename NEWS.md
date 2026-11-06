@@ -1,3 +1,42 @@
+# fz 2.0.0
+
+Aligned with the `funz-fz` 2.0 release
+([Funz/fz](https://github.com/Funz/fz/releases/tag/2.0)). The R functions keep
+their signatures; the changes below come from the Python side and are visible
+from R. See the `funz-fz` `NEWS.md` ("Upgrading from 1.2") for the full list.
+
+## Behaviour changes in funz-fz 2.0 that affect R code
+
+* Python >= 3.9 is required (`SystemRequirements`); Python 3.8 is no longer
+  supported by `funz-fz`.
+* `fzr(timeout = 0)` (and `FZ_RUN_TIMEOUT=0`) now means "no timeout"; it used to
+  time every case out immediately. A negative `timeout` is an error.
+  `ssh://` and `slurm://` calculators have no default timeout unless
+  `FZ_RUN_TIMEOUT` is set; `sh://` and `funz://` keep the 1 hour default.
+* A model without `delim` (nor `var_delim`) reads both `$(x)` and `${x}` as
+  variables. Models that contain other `${...}` text (shell snippets) should set
+  `delim`; all examples in this package already set `delim = "{}"`.
+* `cache://` uses a new SHA-256 cache key: caches written by `funz-fz` <= 1.2
+  are ignored unless `FZ_CACHE_ACCEPT_LEGACY=1`.
+* `sh://` commands resolve a file name to the launch directory only if the file
+  is absent from the case directory. With 1.2, a command such as
+  `sh://cat in.txt > out.txt` could read the un-substituted template: results
+  obtained that way should be re-checked.
+* Case directory names (`case_naming = "path"`) percent-encode unsafe characters
+  (`a/b` becomes `a%2Fb`); `fzo()` decodes them.
+* `fzr()` now writes a `manifest.json` (campaign traceability) in
+  `results_dir`, recording among others the `funz-fz` version.
+
+## Tests
+
+* `tests/testthat/test-funz-fz-2.R` checks `timeout = 0`, the rejection of a
+  negative `timeout` and the `manifest.json` written by `fzr()`. It is skipped
+  when the installed `funz-fz` is older than 2.0.
+
+## Documentation
+
+* `fzr()`'s `timeout` documents the 2.0 resolution rules.
+
 # fz 1.2.0
 
 Aligned with the `funz-fz` 1.2 release
