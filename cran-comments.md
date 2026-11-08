@@ -1,36 +1,21 @@
 ## Submission
 
-This is an update from 1.1 to 1.2.0, aligning the wrapper with the
-`funz-fz` 1.2 Python release.
+This is an update from 1.2.0 to 2.0.0, aligning the wrapper with the
+`funz-fz` 2.0 Python release (<https://github.com/Funz/fz/releases/tag/2.0>).
 
-A win-builder pre-test of this version flagged two problems, both fixed:
-
-1. The invalid `LICENSE.md` file URI in `README.md` (it now points to the
-   file on GitHub).
-2. The `--run-donttest` failure, which is the same one already flagged for
-   the released 1.1
-   (<https://www.stats.ox.ac.uk/pub/bdr/donttest/fz.out>):
-
-```
-Error in py_get_attr(x, name, FALSE) :
-  AttributeError: module 'fz' has no attribute 'fzc'
-```
-
-On that machine a different, unrelated Python package is importable under
-the name `fz`, so the old `fz_available()` (which only checked that *some*
-module named `fz` imported) returned `TRUE` and the guarded example then
-called into the wrong module. `fz_available()` now additionally checks that
-the imported module exposes the `funz-fz` API (`fzi`/`fzc`/`fzo`/`fzr`), so
-every `if (fz_available())` example and test skips cleanly when the Python
-side is missing or misconfigured.
+The R functions keep their signatures. The changes document and test the
+`funz-fz` 2.0 behaviour that is visible from R (timeouts, default variable
+delimiters, cache key, case directory names, `manifest.json`), and raise the
+Python requirement to 3.9, as `funz-fz` 2.0 no longer supports Python 3.8.
+The major version follows the `funz-fz` version.
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+<!-- To fill in before submitting: R CMD check --as-cran (R-devel) and
+     win-builder results for this version. -->
 
-Checked locally with `R CMD check --as-cran` on R-devel, and on
-win-builder (R-devel). The only prior win-builder NOTE (an invalid
-`LICENSE.md` file URI in `README.md`) is fixed in this version.
+GitHub Actions `R-CMD-check` (ubuntu-latest and macos-latest, R release)
+passes for this version.
 
 ## Downstream dependencies
 
@@ -41,7 +26,7 @@ There are no reverse dependencies.
 This package wraps the `funz-fz` Python package via `reticulate`. Following
 CRAN policy for Python-backed packages:
 
-- `SystemRequirements` declares `Python (>= 3.8)` and `funz-fz`.
+- `SystemRequirements` declares `Python (>= 3.9)` and `funz-fz`.
 - `Config/reticulate` declares the pip package so `reticulate` can offer
   automatic installation.
 - `fz_install()` provides a one-call helper for users to install the Python
@@ -50,4 +35,5 @@ CRAN policy for Python-backed packages:
   is guarded by `if (fz_available())` / `skip_if_not(fz_available())` and
   wrapped in `\donttest{}` (or `\dontrun{}` for the GitHub-only
   function-model mode), so `R CMD check` never initialises Python unless a
-  working `funz-fz` is present.
+  working `funz-fz` is present. The new tests for `funz-fz` 2.0 behaviour
+  are also skipped on CRAN (`skip_on_cran()`).

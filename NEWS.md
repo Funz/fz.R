@@ -1,7 +1,7 @@
 # fz 2.0.0
 
 Aligned with the `funz-fz` 2.0 release
-([Funz/fz](https://github.com/Funz/fz/releases/tag/2.0)). The R functions keep
+([Funz/fz](https://github.com/Funz/fz/releases/tag/2.0), 2026-11-08). The R functions keep
 their signatures; the changes below come from the Python side and are visible
 from R. See the `funz-fz` `NEWS.md` ("Upgrading from 1.2") for the full list.
 
