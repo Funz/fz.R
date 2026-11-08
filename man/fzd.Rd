@@ -105,8 +105,13 @@ if (fz_available()) {
   dir.create(ex_dir, showWarnings = FALSE)
   owd <- setwd(ex_dir)
 
-  tf <- tempfile(fileext = ".txt")
-  writeLines(c("x = ${x~0}", "y = ${y~0}"), tf)
+  writeLines(c("x = ${x~0}", "y = ${y~0}"), "input.txt")
+
+  # The calculator: reads the compiled input.txt and writes output.txt
+  writeLines(
+    "awk -F= '/^x/ {x = $2} /^y/ {y = $2} END {print \"z=\" x + y}' input.txt > output.txt",
+    "compute.sh"
+  )
 
   model <- list(
     varprefix = "$", delim = "{}", formulaprefix = "@", commentline = "#",
@@ -142,11 +147,12 @@ if (fz_available()) {
   ), algo)
 
   result <- fzd(
-    tf,
+    "input.txt",
     list(x = "[0;1]", y = "[-5;5]"),
     model,
     output_expression = "z",
     algorithm        = algo,
+    calculators      = "sh://bash compute.sh",
     algorithm_options = list(batch_sample_size = 10, max_iterations = 3)
   )
 

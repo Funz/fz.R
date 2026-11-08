@@ -44,6 +44,15 @@ CRAN policy for Python-backed packages:
 - Nothing attempts a Python connection at load time. Every example and test
   is guarded by `if (fz_available())` / `skip_if_not(fz_available())` and
   wrapped in `\donttest{}` (or `\dontrun{}` for the GitHub-only
-  function-model mode), so `R CMD check` never initialises Python unless a
-  working `funz-fz` is present. The new tests for `funz-fz` 2.0 behaviour
-  are also skipped on CRAN (`skip_on_cran()`).
+  function-model mode), so `R CMD check` only probes the available Python and
+  runs no Python-backed code unless a working `funz-fz` is present. The new
+  tests for `funz-fz` 2.0 behaviour are also skipped on CRAN (`skip_on_cran()`).
+- `.onLoad()` declares the matching `funz-fz` version with
+  `reticulate::py_require()`, which only records the requirement. Outside
+  `R CMD check`, `reticulate` provisions it on first use when no Python is
+  configured. During `R CMD check` (`_R_CHECK_PACKAGE_NAME_` set) neither this
+  declaration nor the version check runs, and `.onLoad()` sets
+  `RETICULATE_USE_MANAGED_VENV=no` (unless already set), so `reticulate` does
+  not provision an ephemeral environment into the home directory. An existing
+  Python environment is never changed without the user's consent in an
+  interactive session.

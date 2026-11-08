@@ -18,7 +18,8 @@ Encoding: UTF-8
 Language: en-US
 SystemRequirements: Python (>= 3.9), funz-fz Python package
 Imports:
-    reticulate (>= 1.28)
+    reticulate (>= 1.41),
+    utils
 Suggests:
     testthat (>= 3.0.0),
     knitr,

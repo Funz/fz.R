@@ -27,6 +27,19 @@ from R. See the `funz-fz` `NEWS.md` ("Upgrading from 1.2") for the full list.
 * `fzr()` now writes a `manifest.json` (campaign traceability) in
   `results_dir`, recording among others the `funz-fz` version.
 
+## Python version synchronisation
+
+* The package now expects the `funz-fz` release with its own major and minor
+  version (`funz-fz>=2.0,<2.1` for this release). It declares it with
+  `reticulate::py_require()`, so `reticulate` (now >= 1.41) provisions it on
+  first use when no Python is configured. This downloads Python and `funz-fz`.
+* `fz_install()` installs that version by default.
+* `fz_available()` detects another `funz-fz` version in an existing Python
+  environment: it offers to install the matching one in an interactive session,
+  and warns otherwise. Set `options(fz.sync_python = FALSE)` to disable this.
+* The error raised when Python is missing no longer suggests installing the
+  unrelated PyPI package `fz`.
+
 ## Tests
 
 * `tests/testthat/test-funz-fz-2.R` checks `timeout = 0`, the rejection of a

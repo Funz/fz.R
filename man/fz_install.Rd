@@ -5,7 +5,7 @@
 \title{Install the fz Python Package}
 \usage{
 fz_install(
-  packages = "funz-fz",
+  packages = fz_python_requirement(),
   method = "auto",
   conda = "auto",
   pip = TRUE,
@@ -14,9 +14,13 @@ fz_install(
 }
 \arguments{
 \item{packages}{Package specification passed to \code{\link[reticulate:py_install]{reticulate::py_install()}}.
-Default \code{"funz-fz"} installs the latest release from PyPI. To track
-unreleased features, install the latest \code{main} branch directly from
-GitHub with \code{"git+https://github.com/Funz/fz.git"}.}
+The default installs the \code{funz-fz} release series matching this R
+package (same major and minor version, e.g. \code{"funz-fz>=2.0,<2.1"} for
+R package 2.0.0). To track unreleased features, install the latest
+\code{main} branch directly from GitHub with
+\code{"git+https://github.com/Funz/fz.git"} and set
+\code{options(fz.sync_python = FALSE)} to silence the version check
+described in \code{\link[=fz_available]{fz_available()}}.}
 
 \item{method}{Installation method. Either "auto", "virtualenv", or "conda".}
 
