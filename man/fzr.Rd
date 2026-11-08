@@ -76,18 +76,18 @@ if (fz_available()) {
   dir.create(ex_dir, showWarnings = FALSE)
   owd <- setwd(ex_dir)
 
-  tf <- tempfile(fileext = ".sh")
+  # The input file is itself the script run by the calculator below
   writeLines(c(
     "#!/bin/sh",
     "echo result = $(( ${x~0} + ${y~0} )) > output.txt"
-  ), tf)
+  ), "input.sh")
 
   model <- list(
     varprefix = "$", delim = "{}", formulaprefix = "@", commentline = "#",
     output = list(result = "grep result output.txt | cut -d= -f2")
   )
 
-  results <- fzr(tf, list(x = c(1L, 2L), y = 3L), model,
+  results <- fzr("input.sh", list(x = c(1L, 2L), y = 3L), model,
                  calculators = "sh://bash input.sh")
 
   setwd(owd)
