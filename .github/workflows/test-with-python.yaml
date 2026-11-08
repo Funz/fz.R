@@ -35,5 +35,10 @@ jobs:
       - name: Install fz Python package
         run: pip install funz-fz
 
+      # Without this, reticulate provisions its own ephemeral Python (without
+      # funz-fz), fz_available() is FALSE and every Python-backed test is skipped.
+      - name: Point reticulate at the CI Python
+        run: echo "RETICULATE_PYTHON=$(python3 -c 'import sys; print(sys.executable)')" >> "$GITHUB_ENV"
+
       - name: Run tests
         run: Rscript -e "testthat::test_local()"

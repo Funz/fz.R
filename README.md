@@ -178,7 +178,7 @@ The same model works with `fzd()` for an algorithm-driven study — pass
 ## System requirements
 
 - R >= 3.6.0
-- Python >= 3.8
+- Python >= 3.9
 - reticulate package
 
 ## Development
