@@ -82,6 +82,20 @@ importable as <code>fz</code> is not mistaken for <code>funz-fz</code>. All exam
 and tests are guarded with <code>if (fz_available())</code> and therefore skip
 (rather than error) when the Python side is missing or misconfigured.</p>
     </div>
+    <div id="version-synchronisation">
+    <h2>Version synchronisation</h2>
+
+
+<p>This package expects the <code>funz-fz</code> release with the same major and minor
+version as itself. When no Python is configured, <span class="pkg">reticulate</span> provisions
+that version automatically in an ephemeral environment on first use, which
+downloads Python and <code>funz-fz</code> (see <code><a href="https://rstudio.github.io/reticulate/reference/py_require.html" class="external-link">reticulate::py_require()</a></code>). An
+existing Python environment is used as is: if its <code>funz-fz</code> version
+differs, this function offers to install the matching one in an interactive
+session, and warns otherwise. Nothing is changed without consent. Set
+<code>options(fz.sync_python = FALSE)</code> to disable this check. Neither step
+runs during <code>R CMD check</code>.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -93,7 +107,7 @@ and tests are guarded with <code>if (fz_available())</code> and therefore skip
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading uv...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Done!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Please install fz with fz_install()</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> fz is available!</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

@@ -75,6 +75,15 @@
 <code><a href="../reference/fzr.html">fzr()</a></code> now writes a <code>manifest.json</code> (campaign traceability) in <code>results_dir</code>, recording among others the <code>funz-fz</code> version.</li>
 </ul></div>
 <div class="section level3">
+<h3 id="python-version-synchronisation-2-0-0">Python version synchronisation<a class="anchor" aria-label="anchor" href="#python-version-synchronisation-2-0-0"></a></h3>
+<ul><li>The package now expects the <code>funz-fz</code> release with its own major and minor version (<code>funz-fz&gt;=2.0,&lt;2.1</code> for this release). It declares it with <code><a href="https://rstudio.github.io/reticulate/reference/py_require.html" class="external-link">reticulate::py_require()</a></code>, so <code>reticulate</code> (now &gt;= 1.41) provisions it on first use when no Python is configured. This downloads Python and <code>funz-fz</code>.</li>
+<li>
+<code><a href="../reference/fz_install.html">fz_install()</a></code> installs that version by default.</li>
+<li>
+<code><a href="../reference/fz_available.html">fz_available()</a></code> detects another <code>funz-fz</code> version in an existing Python environment: it offers to install the matching one in an interactive session, and warns otherwise. Set <code>options(fz.sync_python = FALSE)</code> to disable this.</li>
+<li>The error raised when Python is missing no longer suggests installing the unrelated PyPI package <code>fz</code>.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="tests-2-0-0">Tests<a class="anchor" aria-label="anchor" href="#tests-2-0-0"></a></h3>
 <ul><li>
 <code>tests/testthat/test-funz-fz-2.R</code> checks <code>timeout = 0</code>, the rejection of a negative <code>timeout</code> and the <code>manifest.json</code> written by <code><a href="../reference/fzr.html">fzr()</a></code>. It is skipped when the installed <code>funz-fz</code> is older than 2.0.</li>
