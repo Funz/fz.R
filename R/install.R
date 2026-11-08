@@ -4,9 +4,13 @@
 #' or conda environment managed by reticulate.
 #'
 #' @param packages Package specification passed to [reticulate::py_install()].
-#'   Default \code{"funz-fz"} installs the latest release from PyPI. To track
-#'   unreleased features, install the latest \code{main} branch directly from
-#'   GitHub with \code{"git+https://github.com/Funz/fz.git"}.
+#'   The default installs the \code{funz-fz} release series matching this R
+#'   package (same major and minor version, e.g. \code{"funz-fz>=2.0,<2.1"} for
+#'   R package 2.0.0). To track unreleased features, install the latest
+#'   \code{main} branch directly from GitHub with
+#'   \code{"git+https://github.com/Funz/fz.git"} and set
+#'   \code{options(fz.sync_python = FALSE)} to silence the version check
+#'   described in [fz_available()].
 #' @param method Installation method. Either "auto", "virtualenv", or "conda".
 #' @param conda Path to conda executable. Only used when method is "conda".
 #' @param pip Logical; use pip for installation? Default is TRUE.
@@ -28,7 +32,7 @@
 #' # Track the latest main branch on GitHub (unreleased features)
 #' fz_install(packages = "git+https://github.com/Funz/fz.git")
 #' }
-fz_install <- function(packages = "funz-fz", method = "auto", conda = "auto", pip = TRUE, ...) {
+fz_install <- function(packages = fz_python_requirement(), method = "auto", conda = "auto", pip = TRUE, ...) {
   reticulate::py_install(packages, method = method, conda = conda, pip = pip, ...)
 }
 
@@ -48,6 +52,17 @@ fz_install <- function(packages = "funz-fz", method = "auto", conda = "auto", pi
 #' and tests are guarded with \code{if (fz_available())} and therefore skip
 #' (rather than error) when the Python side is missing or misconfigured.
 #'
+#' @section Version synchronisation:
+#' This package expects the \code{funz-fz} release with the same major and minor
+#' version as itself. When no Python is configured, \pkg{reticulate} provisions
+#' that version automatically in an ephemeral environment on first use, which
+#' downloads Python and \code{funz-fz} (see [reticulate::py_require()]). An
+#' existing Python environment is used as is: if its \code{funz-fz} version
+#' differs, this function offers to install the matching one in an interactive
+#' session, and warns otherwise. Nothing is changed without consent. Set
+#' \code{options(fz.sync_python = FALSE)} to disable this check. Neither step
+#' runs during \code{R CMD check}.
+#'
 #' @export
 #' @importFrom reticulate py_module_available
 #'
@@ -61,6 +76,7 @@ fz_install <- function(packages = "funz-fz", method = "auto", conda = "auto", pi
 #' }
 fz_available <- function() {
   if (is.null(.pkg$fz_available)) {
+    fz_sync_python() # before the import below, which would pin the version
     .pkg$fz_available <- tryCatch({
       reticulate::py_module_available("fz") &&
         all(vapply(

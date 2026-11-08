@@ -22,6 +22,19 @@ importable as \code{fz} is not mistaken for \code{funz-fz}. All examples
 and tests are guarded with \code{if (fz_available())} and therefore skip
 (rather than error) when the Python side is missing or misconfigured.
 }
+\section{Version synchronisation}{
+
+This package expects the \code{funz-fz} release with the same major and minor
+version as itself. When no Python is configured, \pkg{reticulate} provisions
+that version automatically in an ephemeral environment on first use, which
+downloads Python and \code{funz-fz} (see \code{\link[reticulate:py_require]{reticulate::py_require()}}). An
+existing Python environment is used as is: if its \code{funz-fz} version
+differs, this function offers to install the matching one in an interactive
+session, and warns otherwise. Nothing is changed without consent. Set
+\code{options(fz.sync_python = FALSE)} to disable this check. Neither step
+runs during \code{R CMD check}.
+}
+
 \examples{
 \donttest{
 if (fz_available()) {
